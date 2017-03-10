@@ -23,6 +23,8 @@ static NSString* databasePath()
     sqlite3 *masterDB;
 }
 
+@property (strong, nonatomic, readonly) NSCondition* next;
+
 @end
 
 @implementation MigrationManager
@@ -42,8 +44,16 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MigrationManager);
         [[NSFileManager defaultManager] removeItemAtPath:dbPath error:&error];
         return false;
     }
-    
+    _next = [[NSCondition alloc] init];
+
     return true;
+}
+
+- (void)SIGNAL:(NSCondition*)condition
+{
+    [condition lock];
+    [condition signal];
+    [condition unlock];
 }
 
 - (void)migrate:(void (^)(void))complete
@@ -74,10 +84,38 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MigrationManager);
             if (t) {
                 comment = [NSString stringWithUTF8String:(const char*)t];
             }
-            NSLog(@"%@: %f - %f. %@", [formatter stringFromDate:date], morning, evening, comment);
+            if (morning > 0) {
+                NSTimeInterval eightHours = 8 * 60 * 60;
+                NSDate* morningDate = [date dateByAddingTimeInterval:eightHours];
+                [[Model shared] addGlucWith:1 date:morningDate value:morning comments:comment complete:^{
+                    if (evening > 0) {
+                        NSTimeInterval eightTeenHours = 18 * 60 * 60;
+                        NSDate* eveningDate = [date dateByAddingTimeInterval:eightTeenHours];
+                        [[Model shared] addGlucWith:1 date:eveningDate value:morning comments:comment complete:^{
+                            [self SIGNAL:_next];
+                        }];
+                    } else {
+                        [self SIGNAL:_next];
+                    }
+                }];
+            } else if (evening > 0) {
+                NSTimeInterval eightTeenHours = 18 * 60 * 60;
+                NSDate* eveningDate = [date dateByAddingTimeInterval:eightTeenHours];
+                [[Model shared] addGlucWith:1 date:eveningDate value:morning comments:comment complete:^{
+                    [self SIGNAL:_next];
+                }];
+            } else {
+                continue;
+            }
+            [_next lock];
+            [_next wait];
+            [_next unlock];
         }
 
         dispatch_async(dispatch_get_main_queue(), ^() {
+            sqlite3_close(masterDB);
+            NSError* error = nil;
+            [[NSFileManager defaultManager] removeItemAtPath:databasePath() error:&error];
             complete();
         });
     });

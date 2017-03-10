@@ -20,5 +20,8 @@ extension Gluc {
     @NSManaged public var type: Int16
     @NSManaged public var value: Double
     @NSManaged public var comments: String?
+    @NSManaged public var recordName: String?
+    @NSManaged public var zoneName: String?
+    @NSManaged public var ownerName: String?
 
 }

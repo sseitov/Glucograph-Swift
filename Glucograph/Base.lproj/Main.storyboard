@@ -35,7 +35,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="msm-n5-Dib">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.35686274509999999" green="0.45882352939999999" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.27450980390000002" green="0.4823529411764706" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <connections>
                         <segue destination="qig-t4-hDs" kind="relationship" relationship="rootViewController" id="EFu-Hh-wSy"/>
@@ -56,13 +56,13 @@
                     <view key="view" contentMode="scaleToFill" id="QK6-1v-RLo">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.35686274509999999" green="0.45882352939999999" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.27450980390000002" green="0.4823529411764706" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="XOm-mr-mW0">
                         <barButtonItem key="leftBarButtonItem" image="add" id="o6P-fy-vId">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="compose" id="LJd-3E-pjV">
+                        <barButtonItem key="rightBarButtonItem" image="comments" id="LJd-3E-pjV">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <segue destination="wE4-ds-zcQ" kind="show" identifier="notes" id="Vni-w1-eia"/>
@@ -85,13 +85,13 @@
                     <view key="view" contentMode="scaleToFill" id="9Y7-pG-TIk">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.35686274509999999" green="0.45882352939999999" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.27450980392156865" green="0.4823529411764706" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="dd7-aa-slM">
                         <barButtonItem key="leftBarButtonItem" image="add" id="zNh-Wn-HgY">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="compose" id="6Zs-SW-UgM">
+                        <barButtonItem key="rightBarButtonItem" image="comments" id="6Zs-SW-UgM">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <segue destination="wE4-ds-zcQ" kind="show" identifier="notes" id="rQP-RT-V1o"/>
@@ -134,7 +134,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="zv9-C1-kwI">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.35686274509999999" green="0.45882352939999999" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.27450980390000002" green="0.4823529412" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <connections>
                         <segue destination="tmZ-Hj-GRz" kind="relationship" relationship="rootViewController" id="NBw-Od-cjC"/>
@@ -146,12 +146,13 @@
         </scene>
     </scenes>
     <resources>
-        <image name="add" width="27" height="27"/>
+        <image name="add" width="30" height="30"/>
         <image name="back" width="22" height="22"/>
         <image name="blood" width="30" height="30"/>
+        <image name="comments" width="34" height="30"/>
         <image name="pressure" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="rQP-RT-V1o"/>
+        <segue reference="Vni-w1-eia"/>
     </inferredMetricsTieBreakers>
 </document>

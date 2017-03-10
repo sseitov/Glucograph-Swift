@@ -25,11 +25,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.statusBarStyle = .lightContent
         UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName : UIFont.condensedFont()], for: .normal)
         SVProgressHUD.setFont(UIFont.condensedFont())
-        
+ /*
         UITabBar.appearance().isTranslucent = false
         UITabBar.appearance().barTintColor = UIColor.mainColor()
         UITabBar.appearance().tintColor = UIColor.white
-        
+        UITabBar.appearance().unselectedItemTintColor = UIColor.lightGray
+   */     
         // connect iWatch
         if WCSession.isSupported() {
             watchSession = WCSession.default()
@@ -37,11 +38,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             watchSession!.activate()
         }
         
-        if MigrationManager.shared().needMigration() {
-            SVProgressHUD.show(withStatus: NSLocalizedString("Migration...", comment: ""))
-            MigrationManager.shared().migrate({
-                SVProgressHUD.dismiss()
-            })
+        if Model.shared.glucCount() > 0 {
+            
+        } else {
+            if MigrationManager.shared().needMigration() {
+                SVProgressHUD.show(withStatus: NSLocalizedString("Migration...", comment: ""))
+                MigrationManager.shared().migrate({
+                    SVProgressHUD.dismiss()
+                })
+            }
         }
         return true
     }

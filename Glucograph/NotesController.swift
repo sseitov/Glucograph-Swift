@@ -8,11 +8,6 @@
 
 import UIKit
 
-enum ValueType {
-    case blood
-    case pressure
-}
-
 class NotesController: UITableViewController {
 
     var type:ValueType?
