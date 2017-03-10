@@ -6,6 +6,8 @@
   Copyright © 2017 V-Channel. All rights reserved.
 */
 
+"Blood" = "Кровь";
+"Pressure" = "Давление";
 "Today" = "Сегодня";
 "Week" = "Неделя";
 "Mongth" = "Месяц";

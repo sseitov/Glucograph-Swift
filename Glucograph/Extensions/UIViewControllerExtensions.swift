@@ -12,31 +12,42 @@ enum MessageType {
     case error, success, information
 }
 
-enum Period:Int {
-    case day = 0
-    case week = 1
-    case mongth = 2
-    case all = 3
-}
-
 extension UIViewController {
     
-    func setupPeriod(_ period:Period) {
-        let control = UISegmentedControl(items: [NSLocalizedString("Today", comment: ""),
+    func setupTypeAndPeriod(type:ValueType, period:Period) {
+        let periodControl = UISegmentedControl(items: [NSLocalizedString("Today", comment: ""),
                                                  NSLocalizedString("Week", comment: ""),
                                                  NSLocalizedString("Mongth", comment: ""),
                                                  NSLocalizedString("All", comment: "")])
-        control.tintColor = UIColor.white
-        control.selectedSegmentIndex = period.rawValue
-        navigationItem.titleView = control
+        periodControl.tintColor = UIColor.white
+        periodControl.selectedSegmentIndex = period.rawValue
+        periodControl.addTarget(self, action: #selector(self.periodControlChange(control:)), for: .valueChanged)
+        let stretch = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        
+        self.toolbarItems = [stretch, UIBarButtonItem(customView: periodControl), stretch]
+        let typeControl = UISegmentedControl(items: [NSLocalizedString("Blood", comment: ""),
+                                                       NSLocalizedString("Pressure", comment: "")])
+        typeControl.tintColor = UIColor.white
+        typeControl.selectedSegmentIndex = type.rawValue
+        typeControl.addTarget(self, action: #selector(self.typeControlChange(control:)), for: .valueChanged)
+        navigationItem.titleView = typeControl
     }
     
     func setupBackButton() {
         navigationItem.leftBarButtonItem?.target = self
         navigationItem.leftBarButtonItem?.action = #selector(UIViewController.goBack)
     }
-    
-    func segmentedControlChange(control:UISegmentedControl) {
+
+    func typeControlChange(control:UISegmentedControl) {
+        switch control.selectedSegmentIndex {
+        case 1:
+            changeType(.pressure)
+        default:
+            changeType(.blood)
+        }
+    }
+
+    func periodControlChange(control:UISegmentedControl) {
         switch control.selectedSegmentIndex {
         case 0:
             changePeriod(.day)
@@ -47,9 +58,6 @@ extension UIViewController {
         default:
             changePeriod(.all)
         }
-    }
-    
-    func changePeriod(_ period:Period) {
     }
     
     func goBack() {

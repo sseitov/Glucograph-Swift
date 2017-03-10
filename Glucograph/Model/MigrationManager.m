@@ -67,10 +67,6 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MigrationManager);
             sqlite3_finalize(pStmt);
             complete();
         }
-        int count = sqlite3_column_count(pStmt);
-        for (int i=0; i<count; i++) {
-            NSLog(@"%s", sqlite3_column_name(pStmt, i));
-        }
         NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
         formatter.dateStyle = NSDateFormatterLongStyle;
         formatter.timeStyle = NSDateFormatterLongStyle;

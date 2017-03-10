@@ -11,8 +11,33 @@ import CoreData
 import CloudKit
 
 enum ValueType:Int {
-    case blood = 1
-    case pressure = 2
+    case blood = 0
+    case pressure = 1
+}
+
+func changeType(_ type:ValueType) {
+    UserDefaults.standard.set(type.rawValue, forKey: "ValueType")
+    UserDefaults.standard.synchronize()
+}
+
+func valueType() -> ValueType {
+    return ValueType(rawValue: UserDefaults.standard.integer(forKey: "ValueType"))!
+}
+
+enum Period:Int {
+    case day = 0
+    case week = 1
+    case mongth = 2
+    case all = 3
+}
+
+func changePeriod(_ period:Period) {
+    UserDefaults.standard.set(period.rawValue, forKey: "Period")
+    UserDefaults.standard.synchronize()
+}
+
+func period() -> Period {
+    return Period(rawValue: UserDefaults.standard.integer(forKey: "Period"))!
 }
 
 @objc class Model: NSObject {
@@ -119,4 +144,42 @@ enum ValueType:Int {
         })
 
     }
+    
+    func refreshGluc(_ complete: @escaping() -> ()) {
+        let lastDate = myLastGlucDate()
+        let predicate = (lastDate == nil) ?
+            NSPredicate(value: true) :
+            NSPredicate(format: "date > %@", lastDate! as CVarArg)
+
+        let query = CKQuery(recordType: "Gluc", predicate: predicate)
+        
+        cloudDB!.perform(query, inZoneWith: nil) { results, error in
+            guard error == nil else {
+                DispatchQueue.main.async {
+                    print("Cloud Query Error - Refresh: \(error)")
+                    complete()
+                }
+                return
+            }
+            DispatchQueue.main.async {
+                for record in results! {
+                    self.addGluc(record)
+                }
+                complete()
+            }
+        }
+    }
+    
+    func addGluc(_ record:CKRecord) {
+        let gluc = NSEntityDescription.insertNewObject(forEntityName: "Gluc", into: managedObjectContext) as! Gluc
+        gluc.recordName = record.recordID.recordName
+        gluc.zoneName = record.recordID.zoneID.zoneName
+        gluc.ownerName = record.recordID.zoneID.ownerName
+        gluc.date = record.value(forKey: "date") as? NSDate
+        gluc.value = record.value(forKey: "value") as! Double
+        gluc.type = Int16(record.value(forKey: "type") as! Int)
+        gluc.comments = record.value(forKey: "comments") as? String
+        saveContext()
+    }
+
 }

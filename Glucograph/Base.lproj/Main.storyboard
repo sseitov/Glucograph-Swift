@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="FJn-OR-geo">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="hZy-xl-fiO">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -9,150 +9,84 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Tab Bar Controller-->
-        <scene sceneID="Xiy-6c-f9N">
+        <!--Gluc Controller-->
+        <scene sceneID="gSX-EL-ctc">
             <objects>
-                <tabBarController id="FJn-OR-geo" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" id="Hli-Jj-i8M">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="mRj-Q2-c0C" kind="relationship" relationship="viewControllers" id="VSg-q6-TYv"/>
-                        <segue destination="AA6-RS-K81" kind="relationship" relationship="viewControllers" id="n1n-lm-R2m"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="D93-Us-OOe" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-359" y="-106"/>
-        </scene>
-        <!--Blood-->
-        <scene sceneID="l5l-8p-wzv">
-            <objects>
-                <navigationController id="mRj-Q2-c0C" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Blood" image="blood" id="qYv-GC-aAS"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="msm-n5-Dib">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.27450980390000002" green="0.4823529411764706" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="qig-t4-hDs" kind="relationship" relationship="rootViewController" id="EFu-Hh-wSy"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="ZtI-Cl-Qlq" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="467" y="-466"/>
-        </scene>
-        <!--Blood Controller-->
-        <scene sceneID="vhy-Ml-wdy">
-            <objects>
-                <viewController id="qig-t4-hDs" customClass="BloodController" customModule="Glucograph" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Q3z-4Q-JrG" customClass="GlucController" customModule="Glucograph" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="xcc-17-4yn"/>
-                        <viewControllerLayoutGuide type="bottom" id="jNs-Jw-kyZ"/>
+                        <viewControllerLayoutGuide type="top" id="gRY-Px-hEG"/>
+                        <viewControllerLayoutGuide type="bottom" id="36i-qD-5Wd"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="QK6-1v-RLo">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                    <view key="view" contentMode="scaleToFill" id="YcT-L3-5WW">
+                        <rect key="frame" x="0.0" y="64" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.27450980390000002" green="0.4823529411764706" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.27450980390000002" green="0.4823529412" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
-                    <navigationItem key="navigationItem" id="XOm-mr-mW0">
-                        <barButtonItem key="leftBarButtonItem" image="add" id="o6P-fy-vId">
+                    <navigationItem key="navigationItem" id="4NW-tN-eKo">
+                        <barButtonItem key="leftBarButtonItem" image="add" id="x6o-gD-Efv">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="comments" id="LJd-3E-pjV">
+                        <barButtonItem key="rightBarButtonItem" image="comments" id="xyE-iK-S1g">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
-                                <segue destination="wE4-ds-zcQ" kind="show" identifier="notes" id="Vni-w1-eia"/>
+                                <segue destination="uvt-xA-zvf" kind="show" identifier="notes" id="PFp-AE-lG9"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="97X-0J-fed" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Sut-3n-RC5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1254" y="-463"/>
-        </scene>
-        <!--Pressure Controller-->
-        <scene sceneID="rad-Vd-DT2">
-            <objects>
-                <viewController id="tmZ-Hj-GRz" customClass="PressureController" customModule="Glucograph" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="AeO-KM-Jzu"/>
-                        <viewControllerLayoutGuide type="bottom" id="lmw-v2-3xi"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="9Y7-pG-TIk">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.27450980392156865" green="0.4823529411764706" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="dd7-aa-slM">
-                        <barButtonItem key="leftBarButtonItem" image="add" id="zNh-Wn-HgY">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="comments" id="6Zs-SW-UgM">
-                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <connections>
-                                <segue destination="wE4-ds-zcQ" kind="show" identifier="notes" id="rQP-RT-V1o"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="71W-Dr-mBj" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1253" y="266"/>
+            <point key="canvasLocation" x="2079" y="-478"/>
         </scene>
         <!--Notes Controller-->
-        <scene sceneID="rPy-6T-1f9">
+        <scene sceneID="BQ4-8w-TWT">
             <objects>
-                <tableViewController id="wE4-ds-zcQ" customClass="NotesController" customModule="Glucograph" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="60" sectionHeaderHeight="18" sectionFooterHeight="18" id="dJU-95-XdC">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                <tableViewController id="uvt-xA-zvf" customClass="NotesController" customModule="Glucograph" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="60" sectionHeaderHeight="18" sectionFooterHeight="18" id="iIF-Dv-2zc">
+                        <rect key="frame" x="0.0" y="64" width="320" height="460"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <connections>
-                            <outlet property="dataSource" destination="wE4-ds-zcQ" id="5BX-0C-txw"/>
-                            <outlet property="delegate" destination="wE4-ds-zcQ" id="zvr-Wd-HBF"/>
+                            <outlet property="dataSource" destination="uvt-xA-zvf" id="tsw-F0-gBc"/>
+                            <outlet property="delegate" destination="uvt-xA-zvf" id="dx1-Yl-qrh"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="8xY-fj-3bk">
-                        <barButtonItem key="leftBarButtonItem" image="back" id="Bil-Br-dWi">
+                    <navigationItem key="navigationItem" id="yB3-jD-A8L">
+                        <barButtonItem key="leftBarButtonItem" image="back" id="1Mq-pZ-DUK">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </barButtonItem>
                     </navigationItem>
                 </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="vja-3R-oUI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vlL-6H-HaH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2184" y="-23"/>
+            <point key="canvasLocation" x="2904" y="-479"/>
         </scene>
-        <!--Pressure-->
-        <scene sceneID="ULA-f6-3Ux">
+        <!--Navigation Controller-->
+        <scene sceneID="OPE-LE-Mq4">
             <objects>
-                <navigationController id="AA6-RS-K81" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Pressure" image="pressure" id="LRs-a2-K2T"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="zv9-C1-kwI">
+                <navigationController toolbarHidden="NO" id="hZy-xl-fiO" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="DgS-2e-boi">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.27450980390000002" green="0.4823529412" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" id="3qu-mj-iBJ">
+                        <rect key="frame" x="0.0" y="524" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.27450980390000002" green="0.4823529412" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </toolbar>
                     <connections>
-                        <segue destination="tmZ-Hj-GRz" kind="relationship" relationship="rootViewController" id="NBw-Od-cjC"/>
+                        <segue destination="Q3z-4Q-JrG" kind="relationship" relationship="rootViewController" id="unA-GD-kej"/>
                     </connections>
                 </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="xvl-Y8-5wi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Zcw-YF-gfi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="467" y="267"/>
+            <point key="canvasLocation" x="1296" y="-477"/>
         </scene>
     </scenes>
     <resources>
         <image name="add" width="30" height="30"/>
         <image name="back" width="22" height="22"/>
-        <image name="blood" width="30" height="30"/>
         <image name="comments" width="34" height="30"/>
-        <image name="pressure" width="30" height="30"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="Vni-w1-eia"/>
-    </inferredMetricsTieBreakers>
 </document>

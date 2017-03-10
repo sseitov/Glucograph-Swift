@@ -16,8 +16,6 @@
 		2C0816AD1E728D86008794CF /* UIColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0816AA1E728D86008794CF /* UIColorExtensions.swift */; };
 		2C0816AE1E728D86008794CF /* UIFontExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0816AB1E728D86008794CF /* UIFontExtensions.swift */; };
 		2C0816AF1E728D86008794CF /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0816AC1E728D86008794CF /* UIViewControllerExtensions.swift */; };
-		2C0816B11E728EF4008794CF /* BloodController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0816B01E728EF4008794CF /* BloodController.swift */; };
-		2C0816B31E728F21008794CF /* PressureController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0816B21E728F21008794CF /* PressureController.swift */; };
 		2C0816B51E72A0E3008794CF /* logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C0816B41E72A0E3008794CF /* logo.png */; };
 		2C0816B71E72AACF008794CF /* NotesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0816B61E72AACF008794CF /* NotesController.swift */; };
 		2C0816C51E72B8BC008794CF /* TextFieldContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0816C21E72B8BC008794CF /* TextFieldContainer.swift */; };
@@ -33,6 +31,7 @@
 		2CFF85BC1E73109600C3EB41 /* Gluc+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFF85BA1E73109600C3EB41 /* Gluc+CoreDataClass.swift */; };
 		2CFF85BD1E73109600C3EB41 /* Gluc+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFF85BB1E73109600C3EB41 /* Gluc+CoreDataProperties.swift */; };
 		2CFF85BF1E73126A00C3EB41 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFF85BE1E73126A00C3EB41 /* Model.swift */; };
+		2CFF85C11E733E7C00C3EB41 /* GlucController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFF85C01E733E7C00C3EB41 /* GlucController.swift */; };
 		A859C6E1FE1C3CDE9875177D /* Pods_Glucograph.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E79B857970C8F460B4E11DCC /* Pods_Glucograph.framework */; };
 /* End PBXBuildFile section */
 
@@ -53,8 +52,6 @@
 		2C0816AA1E728D86008794CF /* UIColorExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIColorExtensions.swift; path = Extensions/UIColorExtensions.swift; sourceTree = "<group>"; };
 		2C0816AB1E728D86008794CF /* UIFontExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIFontExtensions.swift; path = Extensions/UIFontExtensions.swift; sourceTree = "<group>"; };
 		2C0816AC1E728D86008794CF /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIViewControllerExtensions.swift; path = Extensions/UIViewControllerExtensions.swift; sourceTree = "<group>"; };
-		2C0816B01E728EF4008794CF /* BloodController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BloodController.swift; sourceTree = "<group>"; };
-		2C0816B21E728F21008794CF /* PressureController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PressureController.swift; sourceTree = "<group>"; };
 		2C0816B41E72A0E3008794CF /* logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo.png; sourceTree = SOURCE_ROOT; };
 		2C0816B61E72AACF008794CF /* NotesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesController.swift; sourceTree = "<group>"; };
 		2C0816C21E72B8BC008794CF /* TextFieldContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TextFieldContainer.swift; path = CustomViews/TextFieldContainer.swift; sourceTree = "<group>"; };
@@ -73,6 +70,7 @@
 		2CFF85BA1E73109600C3EB41 /* Gluc+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Gluc+CoreDataClass.swift"; path = "Model/Gluc+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2CFF85BB1E73109600C3EB41 /* Gluc+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Gluc+CoreDataProperties.swift"; path = "Model/Gluc+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		2CFF85BE1E73126A00C3EB41 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Model.swift; path = Model/Model.swift; sourceTree = "<group>"; };
+		2CFF85C01E733E7C00C3EB41 /* GlucController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucController.swift; sourceTree = "<group>"; };
 		51F13E5B13318C8817E7A8BB /* Pods-Glucograph.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Glucograph.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Glucograph/Pods-Glucograph.debug.xcconfig"; sourceTree = "<group>"; };
 		CED4445E62E05819D8D96B1E /* Pods-Glucograph.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Glucograph.release.xcconfig"; path = "Pods/Target Support Files/Pods-Glucograph/Pods-Glucograph.release.xcconfig"; sourceTree = "<group>"; };
 		E79B857970C8F460B4E11DCC /* Pods_Glucograph.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Glucograph.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -119,8 +117,7 @@
 				2C0816BF1E72B893008794CF /* Custom Views */,
 				2C0816941E728D23008794CF /* Extensions */,
 				2C08167A1E728332008794CF /* AppDelegate.swift */,
-				2C0816B01E728EF4008794CF /* BloodController.swift */,
-				2C0816B21E728F21008794CF /* PressureController.swift */,
+				2CFF85C01E733E7C00C3EB41 /* GlucController.swift */,
 				2C0816B61E72AACF008794CF /* NotesController.swift */,
 				2C0816911E728707008794CF /* Resources */,
 			);
@@ -360,10 +357,9 @@
 				2CFF85BF1E73126A00C3EB41 /* Model.swift in Sources */,
 				2C0816B71E72AACF008794CF /* NotesController.swift in Sources */,
 				2C0816C51E72B8BC008794CF /* TextFieldContainer.swift in Sources */,
-				2C0816B11E728EF4008794CF /* BloodController.swift in Sources */,
 				2C0817081E72FEED008794CF /* LocalCache.xcdatamodeld in Sources */,
+				2CFF85C11E733E7C00C3EB41 /* GlucController.swift in Sources */,
 				2C0816A91E728D5B008794CF /* NSPointerArray+AbstractionHelpers.m in Sources */,
-				2C0816B31E728F21008794CF /* PressureController.swift in Sources */,
 				2CFF85BD1E73109600C3EB41 /* Gluc+CoreDataProperties.swift in Sources */,
 				2C08167B1E728332008794CF /* AppDelegate.swift in Sources */,
 			);

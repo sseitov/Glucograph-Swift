@@ -10,12 +10,10 @@ import UIKit
 
 class NotesController: UITableViewController {
 
-    var type:ValueType?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupBackButton()
-        setupPeriod(.all)
+        setupTypeAndPeriod(type: valueType(), period: period())
     }
 
     // MARK: - Table view data source
