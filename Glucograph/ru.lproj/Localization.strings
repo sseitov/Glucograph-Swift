@@ -1,0 +1,14 @@
+/* 
+  Localization.strings
+  Glucograph
+
+  Created by Сергей Сейтов on 10.03.17.
+  Copyright © 2017 V-Channel. All rights reserved.
+*/
+
+"Today" = "Сегодня";
+"Week" = "Неделя";
+"Mongth" = "Месяц";
+"All" = "Все";
+"Blood sugar level" = "Уровень сахара в крови";
+"Pressure" = "Давление";
