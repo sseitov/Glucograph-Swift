@@ -92,13 +92,5 @@ extension Picker : UIPickerViewDataSource, UIPickerViewDelegate {
         }
         return label
     }
-/*
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if component == 1 {
-            return pickerType! == .blood ? "\(9-row)" :  "\(140 - row)"
-        } else {
-            return pickerType! == .blood ? "\(33 - row)." : "\(240 - row)"
-        }
-    }
- */
+    
 }

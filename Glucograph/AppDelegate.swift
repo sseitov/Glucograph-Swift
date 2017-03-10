@@ -19,14 +19,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         SVProgressHUD.setDefaultStyle(.custom)
-        SVProgressHUD.setBackgroundColor(UIColor.mainColor())
-        SVProgressHUD.setForegroundColor(UIColor.white)
+        SVProgressHUD.setBackgroundColor(UIColor.white)
+        SVProgressHUD.setForegroundColor(UIColor.mainColor())
         
         UIApplication.shared.statusBarStyle = .lightContent
-        if let font = UIFont(name: "HelveticaNeue-CondensedBold", size: 17) {
-            UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName : font], for: .normal)
-            SVProgressHUD.setFont(font)
-        }
+        UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName : UIFont.condensedFont()], for: .normal)
+        SVProgressHUD.setFont(UIFont.condensedFont())
         
         UITabBar.appearance().isTranslucent = false
         UITabBar.appearance().barTintColor = UIColor.mainColor()
@@ -38,7 +36,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             watchSession!.delegate = self
             watchSession!.activate()
         }
-
+        
+        if MigrationManager.shared().needMigration() {
+            SVProgressHUD.show(withStatus: NSLocalizedString("Migration...", comment: ""))
+            MigrationManager.shared().migrate({
+                SVProgressHUD.dismiss()
+            })
+        }
         return true
     }
 
