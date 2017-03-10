@@ -28,6 +28,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             SVProgressHUD.setFont(font)
         }
         
+        UITabBar.appearance().isTranslucent = false
+        UITabBar.appearance().barTintColor = UIColor.mainColor()
+        UITabBar.appearance().tintColor = UIColor.white
+        
         // connect iWatch
         if WCSession.isSupported() {
             watchSession = WCSession.default()

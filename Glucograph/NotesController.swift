@@ -20,7 +20,7 @@ class NotesController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupBackButton()
-        setupPeriod()
+        setupPeriod(.all)
     }
 
     // MARK: - Table view data source

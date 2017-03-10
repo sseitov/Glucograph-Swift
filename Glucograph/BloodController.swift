@@ -13,7 +13,7 @@ class BloodController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupBackButton()
-        setupPeriod()
+        setupPeriod(.all)
     }
 
     override func goBack() {

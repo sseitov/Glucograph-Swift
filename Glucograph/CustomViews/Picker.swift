@@ -81,7 +81,7 @@ extension Picker : UIPickerViewDataSource, UIPickerViewDelegate {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 40, height: 100))
         label.font = UIFont.condensedFont(27)
         if pickerType! == .blood {
-            label.textColor = UIColor.black
+            label.textColor = UIColor.errorColor()
         } else {
             label.textColor = component == 1 ? UIColor.mainColor() : UIColor.errorColor()
         }

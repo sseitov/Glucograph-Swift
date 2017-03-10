@@ -12,18 +12,22 @@ enum MessageType {
     case error, success, information
 }
 
-enum Period {
-    case day, week, mongth, all
+enum Period:Int {
+    case day = 0
+    case week = 1
+    case mongth = 2
+    case all = 3
 }
 
 extension UIViewController {
     
-    func setupPeriod() {
+    func setupPeriod(_ period:Period) {
         let control = UISegmentedControl(items: [NSLocalizedString("Today", comment: ""),
                                                  NSLocalizedString("Week", comment: ""),
                                                  NSLocalizedString("Mongth", comment: ""),
                                                  NSLocalizedString("All", comment: "")])
         control.tintColor = UIColor.white
+        control.selectedSegmentIndex = period.rawValue
         navigationItem.titleView = control
     }
     
