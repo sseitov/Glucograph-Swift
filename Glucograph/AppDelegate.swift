@@ -33,18 +33,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             watchSession!.activate()
         }
         
-        SVProgressHUD.show(withStatus: NSLocalizedString("Refresh...", comment: ""))
-        Model.shared.refreshGluc {
-            if Model.shared.glucCount() > 0 {
-                SVProgressHUD.dismiss()
-            } else {
-                if MigrationManager.shared().needMigration() {
+        // migration previouse db
+        if MigrationManager.shared().startMigration() {
+            SVProgressHUD.show(withStatus: NSLocalizedString("Migration...", comment: ""))
+            Model.shared.migrateBlood {
+                if Model.shared.bloodCount() > 0 {
+                    MigrationManager.shared().finishMigration()
+                    SVProgressHUD.dismiss()
+                } else {
                     MigrationManager.shared().migrate({
                         SVProgressHUD.dismiss()
                     })
                 }
             }
         }
+        
         return true
     }
 

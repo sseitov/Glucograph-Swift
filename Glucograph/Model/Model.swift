@@ -93,10 +93,10 @@ func period() -> Period {
         }
     }
     
-    // MARK: - Gluc stack
+    // MARK: - Blood table
 
-    func glucCount() -> Int {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Gluc")
+    func bloodCount() -> Int {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Blood")
         if let count = try? managedObjectContext.count(for: fetchRequest) {
             return count
         } else {
@@ -104,21 +104,20 @@ func period() -> Period {
         }
     }
     
-    func myLastGlucDate() -> Date? {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Gluc")
+    func myLastBludDate() -> Date? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Blood")
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
         fetchRequest.fetchLimit = 1
-        if let all = try? managedObjectContext.fetch(fetchRequest) as! [Gluc], let gluc = all.first {
-            return gluc.date! as Date
+        if let all = try? managedObjectContext.fetch(fetchRequest) as! [Blood], let blood = all.first {
+            return blood.date! as Date
         } else {
             return nil
         }
     }
 
-    func addGlucWith(_ type:Int, date:Date, value:Double, comments:String = "", complete: @escaping() -> ()) {
-        let record = CKRecord(recordType: "Gluc")
-        record.setValue(type , forKey: "type")
+    func addBloodAt(_ date:Date, value:Double, comments:String = "", complete: @escaping() -> ()) {
+        let record = CKRecord(recordType: "Blood")
         record.setValue(date, forKey: "date")
         record.setValue(value, forKey: "value")
         record.setValue(comments, forKey: "comments")
@@ -129,14 +128,13 @@ func period() -> Period {
                     print(error!)
                     complete()
                 } else {
-                    let gluc = NSEntityDescription.insertNewObject(forEntityName: "Gluc", into: self.managedObjectContext) as! Gluc
-                    gluc.recordName = cloudRecord!.recordID.recordName
-                    gluc.zoneName = cloudRecord!.recordID.zoneID.zoneName
-                    gluc.ownerName = cloudRecord!.recordID.zoneID.ownerName
-                    gluc.date = date as NSDate?
-                    gluc.type = Int16(type)
-                    gluc.value = value
-                    gluc.comments = comments
+                    let blood = NSEntityDescription.insertNewObject(forEntityName: "Blood", into: self.managedObjectContext) as! Blood
+                    blood.recordName = cloudRecord!.recordID.recordName
+                    blood.zoneName = cloudRecord!.recordID.zoneID.zoneName
+                    blood.ownerName = cloudRecord!.recordID.zoneID.ownerName
+                    blood.date = date as NSDate?
+                    blood.value = value
+                    blood.comments = comments
                     self.saveContext()
                     complete()
                 }
@@ -145,13 +143,15 @@ func period() -> Period {
 
     }
     
-    func refreshGluc(_ complete: @escaping() -> ()) {
-        let lastDate = myLastGlucDate()
+    func migrateBlood(_ complete: @escaping() -> ()) {
+/*
+        let lastDate = myLastBludDate()
         let predicate = (lastDate == nil) ?
             NSPredicate(value: true) :
             NSPredicate(format: "date > %@", lastDate! as CVarArg)
-
-        let query = CKQuery(recordType: "Gluc", predicate: predicate)
+*/
+        let predicate = NSPredicate(value: true)
+        let query = CKQuery(recordType: "Blood", predicate: predicate)
         
         cloudDB!.perform(query, inZoneWith: nil) { results, error in
             guard error == nil else {
@@ -163,22 +163,21 @@ func period() -> Period {
             }
             DispatchQueue.main.async {
                 for record in results! {
-                    self.addGluc(record)
+                    self.addBlood(record)
                 }
                 complete()
             }
         }
     }
     
-    func addGluc(_ record:CKRecord) {
-        let gluc = NSEntityDescription.insertNewObject(forEntityName: "Gluc", into: managedObjectContext) as! Gluc
-        gluc.recordName = record.recordID.recordName
-        gluc.zoneName = record.recordID.zoneID.zoneName
-        gluc.ownerName = record.recordID.zoneID.ownerName
-        gluc.date = record.value(forKey: "date") as? NSDate
-        gluc.value = record.value(forKey: "value") as! Double
-        gluc.type = Int16(record.value(forKey: "type") as! Int)
-        gluc.comments = record.value(forKey: "comments") as? String
+    func addBlood(_ record:CKRecord) {
+        let blood = NSEntityDescription.insertNewObject(forEntityName: "Blood", into: managedObjectContext) as! Blood
+        blood.recordName = record.recordID.recordName
+        blood.zoneName = record.recordID.zoneID.zoneName
+        blood.ownerName = record.recordID.zoneID.ownerName
+        blood.date = record.value(forKey: "date") as? NSDate
+        blood.value = record.value(forKey: "value") as! Double
+        blood.comments = record.value(forKey: "comments") as? String
         saveContext()
     }
 

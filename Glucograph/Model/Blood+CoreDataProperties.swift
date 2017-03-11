@@ -1,8 +1,8 @@
 //
-//  Gluc+CoreDataProperties.swift
+//  Blood+CoreDataProperties.swift
 //  Glucograph
 //
-//  Created by Сергей Сейтов on 10.03.17.
+//  Created by Сергей Сейтов on 11.03.17.
 //  Copyright © 2017 V-Channel. All rights reserved.
 //
 
@@ -10,14 +10,13 @@ import Foundation
 import CoreData
 
 
-extension Gluc {
+extension Blood {
 
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<Gluc> {
-        return NSFetchRequest<Gluc>(entityName: "Gluc");
+    @nonobjc public class func fetchRequest() -> NSFetchRequest<Blood> {
+        return NSFetchRequest<Blood>(entityName: "Blood");
     }
 
     @NSManaged public var date: NSDate?
-    @NSManaged public var type: Int16
     @NSManaged public var value: Double
     @NSManaged public var comments: String?
     @NSManaged public var recordName: String?

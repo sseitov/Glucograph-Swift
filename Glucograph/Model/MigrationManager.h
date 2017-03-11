@@ -12,7 +12,8 @@
 
 + (MigrationManager *)sharedMigrationManager;
 
-- (bool)needMigration;
+- (bool)startMigration;
 - (void)migrate:(void (^)(void))complete;
+- (void)finishMigration;
 
 @end
