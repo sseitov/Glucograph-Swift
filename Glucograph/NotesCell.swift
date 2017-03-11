@@ -15,19 +15,22 @@ class NotesCell: UITableViewCell {
     @IBOutlet weak var highValue: UILabel!
     @IBOutlet weak var lowValue: UILabel!
     @IBOutlet weak var commentsView: UILabel!
+    @IBOutlet weak var lowWidth: NSLayoutConstraint!
 
     var object:NSManagedObject? {
         didSet {
-            dateView.text = dayTimeOfDate(Model.shared.objectDate(object) as Date?)
+            dateView.text = dayTimeOfDate(Model.shared.objectDate(object) as Date?)?.uppercased()
             commentsView.text = Model.shared.objectComments(object)
             if valueType() == .blood {
                 let blood = object as! Blood
                 highValue.text = String(format: "%.1f", blood.value)
                 lowValue.text = ""
+                lowWidth.constant = 0
             } else {
                 let pressure = object as! Pressure
                 highValue.text = String(format: "%d", Int(pressure.highValue))
                 lowValue.text = String(format: "/ %d", Int(pressure.lowValue))
+                lowWidth.constant = 40
             }
         }
     }

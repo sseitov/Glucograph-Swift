@@ -38,7 +38,7 @@ class CommentsController: UIViewController, UITextViewDelegate {
     
     @IBAction func saveComments(_ sender: Any) {
         let text = commentsView.text != nil ? commentsView.text! : ""
-        SVProgressHUD.show(withStatus: "Save...")
+        SVProgressHUD.show(withStatus: NSLocalizedString("Save...", comment: ""))
         Model.shared.saveComments(text, forObject: object, complete: {
             SVProgressHUD.dismiss()
             self.goBack()

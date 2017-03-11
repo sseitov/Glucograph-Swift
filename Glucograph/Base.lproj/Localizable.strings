@@ -19,3 +19,11 @@
 "Comments" = "Comments";
 "Add..." = "Add...";
 "Delete..." = "Delete...";
+"Save..." = "Save...";
+"day1" = "sunday";
+"day2" = "monday";
+"day3" = "tuesday";
+"day4" = "wed";
+"day5" = "thurs";
+"day6" = "friday";
+"day7" = "saturday";

@@ -11,10 +11,17 @@ import SVProgressHUD
 
 class GlucController: UIViewController {
     
+    @IBOutlet weak var graphView: GraphView!
+    @IBOutlet weak var xAxiz: xAxizView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupBackButton()
         setupType(valueType())
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.refresh),
+                                               name: refreshNotification,
+                                               object: nil)
     }
     
     override func goBack() {
@@ -34,30 +41,15 @@ class GlucController: UIViewController {
         })
         alert?.show()
     }
-/*
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        if toolbarItems != nil, toolbarItems!.count > 0, let periodControl = toolbarItems![1].customView as? UISegmentedControl {
-            let width = (self.view.frame.width - 20) / 5.0
-            for i in 0..<5 {
-                periodControl.setWidth(width, forSegmentAt: i)
-            }
-        }
+    
+    func refresh() {
+        graphView.setNeedsDisplay()
+        xAxiz.setNeedsDisplay()
+        
     }
-
+   
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        print(navigationController?.toolbar.subviews.count)
-
-        if toolbarItems != nil, toolbarItems!.count > 0, let periodControl = toolbarItems![1].customView as? UISegmentedControl {
-            let width = (size.width - 20) / 5.0
-            print("change width to \(size.width)")
-            for i in 0..<5 {
-                periodControl.setWidth(width, forSegmentAt: i)
-            }
-            navigationController?.toolbar.layoutSubviews()
-        }
-
+        refresh()
     }
-*/
 }
