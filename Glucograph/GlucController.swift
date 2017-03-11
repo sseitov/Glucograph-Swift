@@ -9,7 +9,7 @@
 import UIKit
 
 class GlucController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

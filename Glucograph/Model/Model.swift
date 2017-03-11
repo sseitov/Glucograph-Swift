@@ -10,6 +10,8 @@ import UIKit
 import CoreData
 import CloudKit
 
+// MARK: - Current settings
+
 enum ValueType:Int {
     case blood = 0
     case pressure = 1
@@ -39,6 +41,64 @@ func changePeriod(_ period:Period) {
 func period() -> Period {
     return Period(rawValue: UserDefaults.standard.integer(forKey: "Period"))!
 }
+
+// MARK: - Date manipulations
+
+func today() -> Date? {
+//    let components = DateComponents(year: 2016, month: 12, day: 30, hour: 9, minute: 0)
+//    return Calendar.current.date(from: components)
+    return Calendar.current.startOfDay(for: Date())
+}
+
+func lastWeek() -> Date? {
+    if let date = today(), let monday = Calendar.current.date(bySetting: .weekday, value: Calendar.current.firstWeekday, of: date) {
+        return Calendar.current.date(byAdding: .day, value: -7, to: monday)
+    } else {
+        return nil
+    }
+}
+
+func lastMongth() -> Date? {
+    if let date = today() , let firstDay = Calendar.current.date(bySetting: .day, value: 1, of: date) {
+        return Calendar.current.date(byAdding: .month, value: -1, to: firstDay)
+    } else {
+        return nil
+    }
+}
+
+func dayOfDate(_ date:Date?) -> String? {
+    if date != nil {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        formatter.timeStyle = .none
+        return formatter.string(from: date!)
+    } else {
+        return nil
+    }
+}
+
+func timeOfDate(_ date:Date?) -> String? {
+    if date != nil {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+        return formatter.string(from: date!)
+    } else {
+        return nil
+    }
+}
+
+func dayTimeOfDate(_ date:Date?) -> String? {
+    if date != nil {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d MMMM yyyy\nH:mm"
+        return formatter.string(from: date!)
+    } else {
+        return nil
+    }
+}
+
+// MARK: - Data model
 
 @objc class Model: NSObject {
     
@@ -144,12 +204,6 @@ func period() -> Period {
     }
     
     func migrateBlood(_ complete: @escaping() -> ()) {
-/*
-        let lastDate = myLastBludDate()
-        let predicate = (lastDate == nil) ?
-            NSPredicate(value: true) :
-            NSPredicate(format: "date > %@", lastDate! as CVarArg)
-*/
         let predicate = NSPredicate(value: true)
         let query = CKQuery(recordType: "Blood", predicate: predicate)
         
@@ -179,6 +233,52 @@ func period() -> Period {
         blood.value = record.value(forKey: "value") as! Double
         blood.comments = record.value(forKey: "comments") as? String
         saveContext()
+    }
+
+    func allBloodForPeriod(_ period:Period) -> [Blood] {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Blood")
+        switch period {
+        case .day:
+            fetchRequest.predicate = NSPredicate(format: "date > %@", today()! as CVarArg)
+        case .week:
+            fetchRequest.predicate = NSPredicate(format: "date > %@", lastWeek()! as CVarArg)
+        case .mongth:
+            fetchRequest.predicate = NSPredicate(format: "date > %@", lastMongth()! as CVarArg)
+        default:
+            break
+        }
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        if let all = try? managedObjectContext.fetch(fetchRequest) as! [Blood] {
+            return all
+        } else {
+            return []
+        }
+    }
+    
+    // MARK: - Pressure table
+    
+    func allPressureForPeriod(_ period:Period) -> [Pressure] {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Blood")
+        switch period {
+        case .day:
+            fetchRequest.predicate = NSPredicate(format: "date > %@", today()! as CVarArg)
+        case .week:
+            fetchRequest.predicate = NSPredicate(format: "date > %@", lastWeek()! as CVarArg)
+        case .mongth:
+            fetchRequest.predicate = NSPredicate(format: "date > %@", lastMongth()! as CVarArg)
+        default:
+            break
+        }
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+
+        if let all = try? managedObjectContext.fetch(fetchRequest) as! [Pressure] {
+            return all
+        } else {
+            return []
+        }
     }
 
 }
