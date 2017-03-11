@@ -30,7 +30,8 @@ enum Period:Int {
     case day = 0
     case week = 1
     case mongth = 2
-    case all = 3
+    case lastMongth = 3
+    case all = 4
 }
 
 func changePeriod(_ period:Period) {
@@ -66,6 +67,14 @@ func lastMongth() -> Date? {
     }
 }
 
+func previouseMongth() -> Date? {
+    if let date = today() , let firstDay = Calendar.current.date(bySetting: .day, value: 1, of: date) {
+        return Calendar.current.date(byAdding: .month, value: -2, to: firstDay)
+    } else {
+        return nil
+    }
+}
+
 func dayOfDate(_ date:Date?) -> String? {
     if date != nil {
         let formatter = DateFormatter()
@@ -91,7 +100,7 @@ func timeOfDate(_ date:Date?) -> String? {
 func dayTimeOfDate(_ date:Date?) -> String? {
     if date != nil {
         let formatter = DateFormatter()
-        formatter.dateFormat = "d MMMM yyyy\nH:mm"
+        formatter.dateFormat = "d MMMM yyyy H:mm"
         return formatter.string(from: date!)
     } else {
         return nil
@@ -151,6 +160,77 @@ func dayTimeOfDate(_ date:Date?) -> String? {
                 print("Saved data error: \(error)")
             }
         }
+    }
+    
+    // MARK: - Common methods
+    
+    func objectDate(_ obj:NSManagedObject?) -> NSDate? {
+        if (valueType() == .blood) {
+            return (obj as! Blood).date
+        } else {
+            return (obj as! Pressure).date
+        }
+    }
+    
+    func objectComments(_ obj:NSManagedObject?) -> String? {
+        if (valueType() == .blood) {
+            return (obj as! Blood).comments
+        } else {
+            return (obj as! Pressure).comments
+        }
+    }
+   
+    func saveComments(_ comments:String, forObject:NSManagedObject?, complete: @escaping() -> ()) {
+        var recordID:CKRecordID?
+        if valueType() == .blood {
+            let blood = forObject as! Blood
+            let recordZoneID = CKRecordZoneID(zoneName: blood.zoneName!, ownerName: blood.ownerName!)
+            recordID = CKRecordID(recordName: blood.recordName!, zoneID: recordZoneID)
+            blood.comments = comments
+            saveContext()
+        } else {
+            let pressure = forObject as! Pressure
+            let recordZoneID = CKRecordZoneID(zoneName: pressure.zoneName!, ownerName: pressure.ownerName!)
+            recordID = CKRecordID(recordName: pressure.recordName!, zoneID: recordZoneID)
+            pressure.comments = comments
+            saveContext()
+        }
+        
+        cloudDB?.fetch(withRecordID: recordID!, completionHandler: { record, error in
+            if error == nil && record != nil {
+                record!.setValue(comments, forKey: "comments")
+                self.cloudDB!.save(record!, completionHandler: { _, error in
+                    DispatchQueue.main.async {
+                        complete()
+                    }
+                })
+            } else {
+                DispatchQueue.main.async {
+                    complete()
+                }
+            }
+        })
+
+    }
+    
+    func deleteObject(_ object:NSManagedObject?, complete: @escaping() -> ()) {
+        var recordID:CKRecordID?
+        if valueType() == .blood {
+            let blood = object as! Blood
+            let recordZoneID = CKRecordZoneID(zoneName: blood.zoneName!, ownerName: blood.ownerName!)
+            recordID = CKRecordID(recordName: blood.recordName!, zoneID: recordZoneID)
+        } else {
+            let pressure = object as! Pressure
+            let recordZoneID = CKRecordZoneID(zoneName: pressure.zoneName!, ownerName: pressure.ownerName!)
+            recordID = CKRecordID(recordName: pressure.recordName!, zoneID: recordZoneID)
+        }
+        managedObjectContext.delete(object!)
+        saveContext()
+        cloudDB!.delete(withRecordID: recordID!, completionHandler: { record, error in
+            DispatchQueue.main.async {
+                complete()
+            }
+        })
     }
     
     // MARK: - Blood table
@@ -244,6 +324,10 @@ func dayTimeOfDate(_ date:Date?) -> String? {
             fetchRequest.predicate = NSPredicate(format: "date > %@", lastWeek()! as CVarArg)
         case .mongth:
             fetchRequest.predicate = NSPredicate(format: "date > %@", lastMongth()! as CVarArg)
+        case .lastMongth:
+            let pred1 = NSPredicate(format: "date > %@", previouseMongth()! as CVarArg)
+            let pred2 = NSPredicate(format: "date < %@", lastMongth()! as CVarArg)
+            fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [pred1, pred2])
         default:
             break
         }
@@ -260,7 +344,7 @@ func dayTimeOfDate(_ date:Date?) -> String? {
     // MARK: - Pressure table
     
     func allPressureForPeriod(_ period:Period) -> [Pressure] {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Blood")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pressure")
         switch period {
         case .day:
             fetchRequest.predicate = NSPredicate(format: "date > %@", today()! as CVarArg)
@@ -268,6 +352,10 @@ func dayTimeOfDate(_ date:Date?) -> String? {
             fetchRequest.predicate = NSPredicate(format: "date > %@", lastWeek()! as CVarArg)
         case .mongth:
             fetchRequest.predicate = NSPredicate(format: "date > %@", lastMongth()! as CVarArg)
+        case .lastMongth:
+            let pred1 = NSPredicate(format: "date > %@", previouseMongth()! as CVarArg)
+            let pred2 = NSPredicate(format: "date < %@", lastMongth()! as CVarArg)
+            fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [pred1, pred2])
         default:
             break
         }
@@ -279,6 +367,33 @@ func dayTimeOfDate(_ date:Date?) -> String? {
         } else {
             return []
         }
+    }
+    
+    func addPressureAt(_ date:Date, high:Int, low:Int, complete: @escaping() -> ()) {
+        let record = CKRecord(recordType: "Pressure")
+        record.setValue(date, forKey: "date")
+        record.setValue(Double(high), forKey: "highValue")
+        record.setValue(Double(low), forKey: "lowValue")
+        
+        cloudDB!.save(record, completionHandler: { cloudRecord, error in
+            DispatchQueue.main.async {
+                if error != nil {
+                    print(error!)
+                    complete()
+                } else {
+                    let pressure = NSEntityDescription.insertNewObject(forEntityName: "Pressure", into: self.managedObjectContext) as! Pressure
+                    pressure.recordName = cloudRecord!.recordID.recordName
+                    pressure.zoneName = cloudRecord!.recordID.zoneID.zoneName
+                    pressure.ownerName = cloudRecord!.recordID.zoneID.ownerName
+                    pressure.date = date as NSDate?
+                    pressure.highValue = Double(high)
+                    pressure.lowValue = Double(low)
+                    self.saveContext()
+                    complete()
+                }
+            }
+        })
+        
     }
 
 }

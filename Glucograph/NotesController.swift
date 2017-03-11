@@ -7,19 +7,33 @@
 //
 
 import UIKit
+import SVProgressHUD
 
-class NotesController: UITableViewController {
+class NotesController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    @IBOutlet weak var tableView: UITableView!
     var bloods:[Blood] = []
     var pressures:[Pressure] = []
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupBackButton()
-        setupTypeAndPeriod(type: valueType(), period: period())
-        refresh()
+        setupType(valueType())
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.refresh),
+                                               name: refreshNotification,
+                                               object: nil)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        refresh()
+    }
+    
     func refresh() {
         if valueType() == .blood {
             bloods = Model.shared.allBloodForPeriod(period())
@@ -31,23 +45,23 @@ class NotesController: UITableViewController {
     
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return valueType() == .blood ? bloods.count : pressures.count
     }
     
-    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         var text:String?
         if (valueType() == .blood) {
             text = bloods[indexPath.row].comments
@@ -61,7 +75,7 @@ class NotesController: UITableViewController {
         }
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "notes", for: indexPath) as! NotesCell
         if valueType() == .blood {
             cell.object = bloods[indexPath.row]
@@ -71,13 +85,32 @@ class NotesController: UITableViewController {
         return cell
     }
 
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
 
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            tableView.deleteRows(at: [indexPath], with: .top)
+            let object = valueType() == .blood ? bloods[indexPath.row] : pressures[indexPath.row]
+            SVProgressHUD.show(withStatus: NSLocalizedString("Delete...", comment: ""))
+            Model.shared.deleteObject(object, complete: {
+                SVProgressHUD.dismiss()
+                self.tableView.beginUpdates()
+                if valueType() == .blood {
+                    self.bloods.remove(at: indexPath.row)
+                } else {
+                    self.pressures.remove(at: indexPath.row)
+                }
+                self.tableView.deleteRows(at: [indexPath], with: .top)
+                self.tableView.endUpdates()
+            })
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "comments" {
+            let next = segue.destination as! CommentsController
+            next.object = (sender as! NotesCell).object
         }
     }
 

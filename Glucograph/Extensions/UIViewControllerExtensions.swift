@@ -12,19 +12,22 @@ enum MessageType {
     case error, success, information
 }
 
+let refreshNotification = Notification.Name("REFRESH")
+
 extension UIViewController {
     
-    func setupTypeAndPeriod(type:ValueType, period:Period) {
-        let periodControl = UISegmentedControl(items: [NSLocalizedString("Today", comment: ""),
-                                                 NSLocalizedString("Week", comment: ""),
-                                                 NSLocalizedString("Mongth", comment: ""),
-                                                 NSLocalizedString("All", comment: "")])
-        periodControl.tintColor = UIColor.white
-        periodControl.selectedSegmentIndex = period.rawValue
-        periodControl.addTarget(self, action: #selector(self.periodControlChange(control:)), for: .valueChanged)
-        let stretch = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        
-        self.toolbarItems = [stretch, UIBarButtonItem(customView: periodControl), stretch]
+    func setupTitle(_ text:String) {
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 44))
+        label.textAlignment = .center
+        label.font = UIFont.condensedFont(15)
+        label.text = text
+        label.textColor = UIColor.white
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        navigationItem.titleView = label
+    }
+
+    func setupType(_ type:ValueType) {
         let typeControl = UISegmentedControl(items: [NSLocalizedString("Blood", comment: ""),
                                                        NSLocalizedString("Pressure", comment: "")])
         typeControl.tintColor = UIColor.white
@@ -45,19 +48,7 @@ extension UIViewController {
         default:
             changeType(.blood)
         }
-    }
-
-    func periodControlChange(control:UISegmentedControl) {
-        switch control.selectedSegmentIndex {
-        case 0:
-            changePeriod(.day)
-        case 1:
-            changePeriod(.week)
-        case 2:
-            changePeriod(.mongth)
-        default:
-            changePeriod(.all)
-        }
+        NotificationCenter.default.post(name: refreshNotification, object: nil)
     }
     
     func goBack() {

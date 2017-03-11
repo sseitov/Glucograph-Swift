@@ -19,8 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
         SVProgressHUD.setDefaultStyle(.custom)
-        SVProgressHUD.setBackgroundColor(UIColor.white)
-        SVProgressHUD.setForegroundColor(UIColor.mainColor())
+        SVProgressHUD.setBackgroundColor(UIColor.mainColor())
+        SVProgressHUD.setForegroundColor(UIColor.white)
         
         UIApplication.shared.statusBarStyle = .lightContent
         UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName : UIFont.condensedFont()], for: .normal)
@@ -82,7 +82,7 @@ extension AppDelegate : WCSessionDelegate {
     
     @available(iOS 9.3, *)
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-        print("activationDidCompleteWith \(activationState)")
+        print("activationDidCompleteWith \(activationState.rawValue)")
     }
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {

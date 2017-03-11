@@ -10,8 +10,12 @@
 "Pressure" = "Pressure";
 "Today" = "Today";
 "Week" = "Week";
-"Mongth" = "Mongth";
+"This Mongth" = "This Mongth";
+"Last Mongth" = "Last Mongth";
 "All" = "All";
 "Blood sugar level" = "Blood sugar level";
 "Pressure" = "Pressure";
 "Migration..." = "Migration...";
+"Comments" = "Comments";
+"Add..." = "Add...";
+"Delete..." = "Delete...";

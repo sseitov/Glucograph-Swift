@@ -18,8 +18,8 @@ class NotesCell: UITableViewCell {
 
     var object:NSManagedObject? {
         didSet {
-            dateView.text = dayTimeOfDate(objectDate(object) as Date?)
-            commentsView.text = objectComments(object)
+            dateView.text = dayTimeOfDate(Model.shared.objectDate(object) as Date?)
+            commentsView.text = Model.shared.objectComments(object)
             if valueType() == .blood {
                 let blood = object as! Blood
                 highValue.text = String(format: "%.1f", blood.value)
@@ -27,24 +27,8 @@ class NotesCell: UITableViewCell {
             } else {
                 let pressure = object as! Pressure
                 highValue.text = String(format: "%d", Int(pressure.highValue))
-                lowValue.text = String(format: "%d", Int(pressure.lowValue))
+                lowValue.text = String(format: "/ %d", Int(pressure.lowValue))
             }
-        }
-    }
-    
-    private func objectDate(_ obj:NSManagedObject?) -> NSDate? {
-        if (valueType() == .blood) {
-            return (obj as! Blood).date
-        } else {
-            return (obj as! Pressure).date
-        }
-    }
-
-    private func objectComments(_ obj:NSManagedObject?) -> String? {
-        if (valueType() == .blood) {
-            return (obj as! Blood).comments
-        } else {
-            return (obj as! Pressure).comments
         }
     }
     
