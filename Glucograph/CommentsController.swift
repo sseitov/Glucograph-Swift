@@ -22,6 +22,10 @@ class CommentsController: UIViewController, UITextViewDelegate {
         commentsView.text = Model.shared.objectComments(object)
     }
     
+    override func goBack() {
+        dismiss(animated: true, completion: nil)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         commentsView.becomeFirstResponder()

@@ -37,8 +37,10 @@ class NotesController: UIViewController, UITableViewDelegate, UITableViewDataSou
     func refresh() {
         if valueType() == .blood {
             bloods = Model.shared.allBloodForPeriod(period())
+            Model.shared.refreshBlood()
         } else {
             pressures = Model.shared.allPressureForPeriod(period())
+            Model.shared.refreshPressure()
         }
         tableView.reloadData()
     }
@@ -109,7 +111,8 @@ class NotesController: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "comments" {
-            let next = segue.destination as! CommentsController
+            let nav = segue.destination as! UINavigationController
+            let next = nav.topViewController as! CommentsController
             next.object = (sender as! NotesCell).object
         }
     }

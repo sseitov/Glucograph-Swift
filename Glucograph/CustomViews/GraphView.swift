@@ -7,10 +7,30 @@
 //
 
 import UIKit
+import CoreData
 
 class GraphView: UIView {
 
-    var gradient:CGGradient?
+    var objects:[NSManagedObject] = []
+    var range:(min:Double, max:Double)?
+
+    let secondsPerDay:TimeInterval = 24*60*60
+    let secondsPerWeek:TimeInterval = 24*60*60*7
+    let secondsPerMonth:TimeInterval = 24*60*60*31
+    
+    private var gradient:CGGradient?
+    
+    class func intervalCount() -> Int {
+        switch period() {
+        case .day:
+            return 12
+        case .week:
+            return 6
+        default:
+            return 15
+        }
+    }
+
     override func awakeFromNib() {
         super.awakeFromNib()
         setupBorder(UIColor.clear, radius: 10)
@@ -30,6 +50,7 @@ class GraphView: UIView {
                                     start: CGPoint(), end: CGPoint(x:0, y:rect.size.height),
                                     options: CGGradientDrawingOptions(rawValue: 0))
         drawAxiz(rect)
+        drawGraph(rect)
     }
 
     func drawAxiz(_ rect: CGRect) {
@@ -68,17 +89,60 @@ class GraphView: UIView {
                 yAxiz.stroke()
                 offsetX += stepX
             }
+        } else {
+            yAxiz.move(to: CGPoint(x: origin.x + (rect.size.width - 20), y: origin.y+5))
+            yAxiz.addLine(to: CGPoint(x: origin.x + (rect.size.width - 20), y: 5))
+            yAxiz.stroke()
         }
     }
     
-    class func intervalCount() -> Int {
+    func drawGraph(_ rect: CGRect) {
+        if range == nil {
+            return
+        }
+        var timeLength:TimeInterval = 0
+        var startTime:TimeInterval = 0
         switch period() {
         case .day:
-            return 12
+            timeLength = secondsPerDay
+            startTime = today()!.timeIntervalSince1970
         case .week:
-            return 6
-        default:
-            return 15
+            timeLength = secondsPerWeek
+            startTime = lastWeek()!.timeIntervalSince1970
+        case .mongth:
+            timeLength = secondsPerMonth
+            startTime = lastMongth()!.timeIntervalSince1970
+        case .lastMongth:
+            timeLength = secondsPerMonth
+            startTime = previouseMongth()!.timeIntervalSince1970
+        case .all:
+            timeLength = Model.shared.objectDate(objects[0])!.timeIntervalSince1970 - Model.shared.objectDate(objects.last!)!.timeIntervalSince1970
+            startTime = Model.shared.objectDate(objects.last!)!.timeIntervalSince1970
         }
+        
+        let origin = CGPoint(x: 10, y: rect.size.height - 10)
+        let timeScale:CGFloat = (rect.size.width - 20) / CGFloat(timeLength)
+        let valueScale:CGFloat = (rect.size.height - 20) / CGFloat(range!.max - range!.min)
+        if valueType() == .blood {
+            var blood = objects.last as! Blood
+            let graph = UIBezierPath()
+            UIColor.errorColor().setStroke()
+            graph.lineWidth = 3
+            var d = CGFloat(Model.shared.objectDate(blood)!.timeIntervalSince1970 - startTime)
+            var v = CGFloat(blood.value - range!.min)
+            graph.move(to: CGPoint(x: (origin.x + d*timeScale), y: (origin.y - v*valueScale)))
+
+            for i in (0..<objects.count-1).reversed() {
+                blood = objects[i] as! Blood
+                if (blood.value > 0) {
+                    d = CGFloat(Model.shared.objectDate(blood)!.timeIntervalSince1970 - startTime)
+                    v = CGFloat(blood.value - range!.min)
+                    graph.addLine(to: CGPoint(x: (origin.x + d*timeScale), y: (origin.y - v*valueScale)))
+                }
+            }
+
+            graph.stroke()
+        }
+
     }
 }
