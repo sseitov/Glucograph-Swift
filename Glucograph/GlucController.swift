@@ -41,6 +41,7 @@ class GlucController: UIViewController {
                 let value = Double(val1) + Double(val2)/10.0
                 Model.shared.addBloodAt(Date(), value: value, complete: {
                     SVProgressHUD.dismiss()
+                    self.performSegue(withIdentifier: "notes", sender: nil)
                 })
             }
         })

@@ -97,7 +97,7 @@ class GraphView: UIView {
     }
     
     func drawGraph(_ rect: CGRect) {
-        if range == nil {
+        if range == nil || objects.count < 2 {
             return
         }
         

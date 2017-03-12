@@ -20,7 +20,7 @@ class yAxizView: UIView {
         let stepY:CGFloat = (rect.size.height - 30) / 10
         let stepVal = (range!.max - range!.min)/10
         var val = range!.min
-        for _ in 0...11 {
+        for _ in 0...10 {
             let text = valueType() == .blood ? NSString(format: "%.1f", val) : NSString(format: "%d", Int(val))
             text.draw(UIFont.condensedFont(12), color: UIColor.white, rect: textRect)
             val += stepVal

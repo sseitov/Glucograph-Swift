@@ -228,7 +228,6 @@ func dayTimeOfDate(_ date:Date?) -> String? {
         saveContext()
         cloudDB!.delete(withRecordID: recordID!, completionHandler: { record, error in
             DispatchQueue.main.async {
-                NotificationCenter.default.post(name: refreshNotification, object: nil)
                 complete()
             }
         })
