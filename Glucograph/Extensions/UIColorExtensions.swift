@@ -28,10 +28,6 @@ extension UIColor {
         return color(70, 123, 170, alpha)
     }
     
-    class func errorColor() -> UIColor {
-        return color(240, 90, 80, 1)
-    }
-    
     class func bloodColor() -> UIColor {
         return color(207, 43, 64, 1)
     }

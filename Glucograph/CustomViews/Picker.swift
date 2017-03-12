@@ -81,9 +81,9 @@ extension Picker : UIPickerViewDataSource, UIPickerViewDelegate {
         let label = UILabel(frame: CGRect(x: 0, y: 0, width: 40, height: 100))
         label.font = UIFont.condensedFont(27)
         if pickerType! == .blood {
-            label.textColor = UIColor.errorColor()
+            label.textColor = UIColor.bloodColor()
         } else {
-            label.textColor = component == 1 ? UIColor.mainColor() : UIColor.errorColor()
+            label.textColor = component == 1 ? UIColor.mainColor() : UIColor.bloodColor()
         }
         if component == 1 {
             label.text = pickerType! == .blood ? "\(9-row)" :  "\(140 - row)"
