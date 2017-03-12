@@ -362,11 +362,13 @@ func dayTimeOfDate(_ date:Date?) -> String? {
                 }
                 return
             }
-            DispatchQueue.main.async {
-                for record in results! {
-                    self.addBlood(record)
+            if results != nil && results!.count > 0 {
+                DispatchQueue.main.async {
+                    for record in results! {
+                        self.addBlood(record)
+                    }
+                    NotificationCenter.default.post(name: refreshNotification, object: nil)
                 }
-                NotificationCenter.default.post(name: refreshNotification, object: nil)
             }
         }
     }
@@ -525,11 +527,13 @@ func dayTimeOfDate(_ date:Date?) -> String? {
                 }
                 return
             }
-            DispatchQueue.main.async {
-                for record in results! {
-                    self.addPressure(record)
+            if results != nil && results!.count > 0 {
+                DispatchQueue.main.async {
+                    for record in results! {
+                        self.addPressure(record)
+                    }
+                    NotificationCenter.default.post(name: refreshNotification, object: nil)
                 }
-                NotificationCenter.default.post(name: refreshNotification, object: nil)
             }
         }
     }

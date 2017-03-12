@@ -32,6 +32,10 @@ extension UIColor {
         return color(240, 90, 80, 1)
     }
     
+    class func bloodColor() -> UIColor {
+        return color(207, 43, 64, 1)
+    }
+    
     func imageFromColor(_ size:CGSize, cornerRadius:CGFloat) -> UIImage {
         let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
         UIGraphicsBeginImageContext(rect.size)

@@ -10,6 +10,10 @@ import UIKit
 import SVProgressHUD
 import WatchConnectivity
 
+func IS_PAD() -> Bool {
+    return UIDevice.current.userInterfaceIdiom == .pad
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 

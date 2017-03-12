@@ -100,8 +100,10 @@ class GraphView: UIView {
         if range == nil {
             return
         }
+        
         var timeLength:TimeInterval = 0
         var startTime:TimeInterval = 0
+        
         switch period() {
         case .day:
             timeLength = secondsPerDay
@@ -123,11 +125,12 @@ class GraphView: UIView {
         let origin = CGPoint(x: 10, y: rect.size.height - 10)
         let timeScale:CGFloat = (rect.size.width - 20) / CGFloat(timeLength)
         let valueScale:CGFloat = (rect.size.height - 20) / CGFloat(range!.max - range!.min)
+        
         if valueType() == .blood {
             var blood = objects.last as! Blood
             let graph = UIBezierPath()
-            UIColor.errorColor().setStroke()
-            graph.lineWidth = 3
+            UIColor.bloodColor().setStroke()
+            graph.lineWidth = IS_PAD() ? 5 : 3
             var d = CGFloat(Model.shared.objectDate(blood)!.timeIntervalSince1970 - startTime)
             var v = CGFloat(blood.value - range!.min)
             graph.move(to: CGPoint(x: (origin.x + d*timeScale), y: (origin.y - v*valueScale)))
@@ -140,8 +143,37 @@ class GraphView: UIView {
                     graph.addLine(to: CGPoint(x: (origin.x + d*timeScale), y: (origin.y - v*valueScale)))
                 }
             }
-
             graph.stroke()
+        } else {
+            func drawPressure(high:Bool) {
+                var pressure = objects.last as! Pressure
+                let graph = UIBezierPath()
+                if high {
+                    UIColor.bloodColor().setStroke()
+                } else {
+                    UIColor.mainColor().setStroke()
+                }
+                graph.lineWidth = IS_PAD() ? 5 : 3
+                var d = CGFloat(Model.shared.objectDate(pressure)!.timeIntervalSince1970 - startTime)
+                var v = CGFloat((high ? pressure.highValue : pressure.lowValue) - range!.min)
+                graph.move(to: CGPoint(x: (origin.x + d*timeScale), y: (origin.y - v*valueScale)))
+                
+                for i in (0..<objects.count-1).reversed() {
+                    pressure = objects[i] as! Pressure
+                    if high && pressure.highValue == 0 {
+                        continue
+                    }
+                    if !high && pressure.lowValue == 0 {
+                        continue
+                    }
+                    d = CGFloat(Model.shared.objectDate(pressure)!.timeIntervalSince1970 - startTime)
+                    v = CGFloat((high ? pressure.highValue : pressure.lowValue) - range!.min)
+                    graph.addLine(to: CGPoint(x: (origin.x + d*timeScale), y: (origin.y - v*valueScale)))
+                }
+                graph.stroke()
+            }
+            drawPressure(high: true)
+            drawPressure(high: false)
         }
 
     }

@@ -24,6 +24,7 @@ class GlucController: UIViewController {
                                                selector: #selector(self.refresh),
                                                name: refreshNotification,
                                                object: nil)
+        periodControl.selectedSegmentIndex = period().rawValue
     }
     
     override func goBack() {
