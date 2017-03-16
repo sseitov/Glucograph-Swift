@@ -33,15 +33,23 @@ class GlucController: UIViewController {
             changePeriod(.day)
             SVProgressHUD.show(withStatus: NSLocalizedString("Add...", comment: ""))
             if valueType() == .pressure {
-                Model.shared.addPressureAt(Date(), high: val1, low: val2, complete: {
+                Model.shared.addPressureAt(Date(), high: val1, low: val2, error: { err in
                     SVProgressHUD.dismiss()
-                    self.performSegue(withIdentifier: "notes", sender: nil)
+                    if err != nil {
+                        self.showMessage(err!.localizedDescription, messageType: .error)
+                    } else {
+                        self.performSegue(withIdentifier: "notes", sender: nil)
+                    }
                 })
             } else {
                 let value = Double(val1) + Double(val2)/10.0
-                Model.shared.addBloodAt(Date(), value: value, complete: {
+                Model.shared.addBloodAt(Date(), value: value, error: { err in
                     SVProgressHUD.dismiss()
-                    self.performSegue(withIdentifier: "notes", sender: nil)
+                    if err != nil {
+                        self.showMessage(err!.localizedDescription, messageType: .error)
+                    } else {
+                        self.performSegue(withIdentifier: "notes", sender: nil)
+                    }
                 })
             }
         })

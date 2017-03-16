@@ -45,11 +45,25 @@ class Picker: LGAlertView {
     override func show() {
         super.show()
         if pickerType == .blood {
-            pickerView.selectRow(26, inComponent: 0, animated: false)
-            pickerView.selectRow(7, inComponent: 1, animated: false)
+            let blood = Model.shared.myLastBlud()
+            if blood != nil {
+                let intVal = Int(blood!.value)
+                let decVal = Int((blood!.value - Double(intVal))*10)
+                pickerView.selectRow(33 - intVal, inComponent: 0, animated: false)
+                pickerView.selectRow(9 - decVal , inComponent: 1, animated: false)
+            } else {
+                pickerView.selectRow(26, inComponent: 0, animated: false)
+                pickerView.selectRow(7, inComponent: 1, animated: false)
+            }
         } else {
-            pickerView.selectRow(120, inComponent: 0, animated: false)
-            pickerView.selectRow(60, inComponent: 1, animated: false)
+            let pressure = Model.shared.myLastPressure()
+            if pressure != nil {
+                pickerView.selectRow(240 - Int(pressure!.highValue), inComponent: 0, animated: false)
+                pickerView.selectRow(140 - Int(pressure!.lowValue), inComponent: 1, animated: false)
+            } else {
+                pickerView.selectRow(120, inComponent: 0, animated: false)
+                pickerView.selectRow(60, inComponent: 1, animated: false)
+            }
         }
     }
     

@@ -53,5 +53,27 @@ extension UIViewController {
     
     func goBack() {
         _ = self.navigationController!.popViewController(animated: true)
-    }    
+    }
+    
+    // MARK: - alerts
+    
+    func showMessage(_ error:String, messageType:MessageType, messageHandler: (() -> ())? = nil) {
+        var title:String = ""
+        switch messageType {
+        case .success:
+            title = "Success"
+        case .information:
+            title = "Information"
+        default:
+            title = "Error"
+        }
+        let alert = LGAlertView.decoratedAlert(withTitle:title, message: error, cancelButtonTitle: "OK", cancelButtonBlock: { alert in
+            if messageHandler != nil {
+                messageHandler!()
+            }
+        })
+        alert!.titleLabel.textColor = messageType == .error ? UIColor.bloodColor() : UIColor.mainColor()
+        alert?.show()
+    }
+
 }

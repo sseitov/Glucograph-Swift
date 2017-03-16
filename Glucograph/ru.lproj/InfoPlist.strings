@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  Glucograph
+
+  Created by Сергей Сейтов on 16.03.17.
+  Copyright © 2017 V-Channel. All rights reserved.
+*/
+
+"CFBundleDisplayName" = "Глюкограф";

@@ -83,11 +83,11 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MigrationManager);
             if (morning > 0) {
                 NSTimeInterval eightHours = 8 * 60 * 60;
                 NSDate* morningDate = [date dateByAddingTimeInterval:eightHours];
-                [[Model shared] addBloodAt:morningDate value:morning comments:comment complete:^{
+                [[Model shared] addBloodAt:morningDate value:morning comments:comment error:^(NSError* err) {
                     if (evening > 0) {
                         NSTimeInterval eightTeenHours = 18 * 60 * 60;
                         NSDate* eveningDate = [date dateByAddingTimeInterval:eightTeenHours];
-                        [[Model shared] addBloodAt:eveningDate value:morning comments:comment complete:^{
+                        [[Model shared] addBloodAt:eveningDate value:morning comments:comment error:^(NSError* err) {
                             [self SIGNAL:_next];
                         }];
                     } else {
@@ -97,7 +97,7 @@ SYNTHESIZE_SINGLETON_FOR_CLASS(MigrationManager);
             } else if (evening > 0) {
                 NSTimeInterval eightTeenHours = 18 * 60 * 60;
                 NSDate* eveningDate = [date dateByAddingTimeInterval:eightTeenHours];
-                [[Model shared] addBloodAt:eveningDate value:morning comments:comment complete:^{
+                [[Model shared] addBloodAt:eveningDate value:morning comments:comment error:^(NSError* err) {
                     [self SIGNAL:_next];
                 }];
             } else {

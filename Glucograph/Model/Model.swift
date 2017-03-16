@@ -289,29 +289,28 @@ func dayTimeOfDate(_ date:Date?) -> String? {
         }
     }
     
-    func myLastBludDate() -> Date? {
+    func myLastBlud() -> Blood? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Blood")
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
         fetchRequest.fetchLimit = 1
         if let all = try? managedObjectContext.fetch(fetchRequest) as! [Blood], let blood = all.first {
-            return blood.date! as Date
+            return blood
         } else {
             return nil
         }
     }
 
-    func addBloodAt(_ date:Date, value:Double, comments:String = "", complete: @escaping() -> ()) {
+    func addBloodAt(_ date:Date, value:Double, comments:String = "", error: @escaping(NSError?) -> ()) {
         let record = CKRecord(recordType: "Blood")
         record.setValue(date, forKey: "date")
         record.setValue(value, forKey: "value")
         record.setValue(comments, forKey: "comments")
         
-        cloudDB!.save(record, completionHandler: { cloudRecord, error in
+        cloudDB!.save(record, completionHandler: { cloudRecord, err in
             DispatchQueue.main.async {
-                if error != nil {
-                    print(error!)
-                    complete()
+                if err != nil {
+                    error(err as NSError?)
                 } else {
                     let blood = NSEntityDescription.insertNewObject(forEntityName: "Blood", into: self.managedObjectContext) as! Blood
                     blood.recordName = cloudRecord!.recordID.recordName
@@ -321,7 +320,7 @@ func dayTimeOfDate(_ date:Date?) -> String? {
                     blood.value = value
                     blood.comments = comments
                     self.saveContext()
-                    complete()
+                    error(nil)
                 }
             }
         })
@@ -350,7 +349,7 @@ func dayTimeOfDate(_ date:Date?) -> String? {
     }
     
     func refreshBlood() {
-        let date = myLastBludDate()
+        let date = myLastBlud()?.date
         let predicate = date == nil ? NSPredicate(value: true) : NSPredicate(format: "date > %@", date! as CVarArg)
         let query = CKQuery(recordType: "Blood", predicate: predicate)
 
@@ -424,13 +423,13 @@ func dayTimeOfDate(_ date:Date?) -> String? {
     
     // MARK: - Pressure table
     
-    func myLastPressureDate() -> Date? {
+    func myLastPressure() -> Pressure? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pressure")
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
         fetchRequest.fetchLimit = 1
         if let all = try? managedObjectContext.fetch(fetchRequest) as! [Pressure], let pressure = all.first {
-            return pressure.date! as Date
+            return pressure
         } else {
             return nil
         }
@@ -462,17 +461,16 @@ func dayTimeOfDate(_ date:Date?) -> String? {
         }
     }
     
-    func addPressureAt(_ date:Date, high:Int, low:Int, complete: @escaping() -> ()) {
+    func addPressureAt(_ date:Date, high:Int, low:Int, error: @escaping(NSError?) -> ()) {
         let record = CKRecord(recordType: "Pressure")
         record.setValue(date, forKey: "date")
         record.setValue(Double(high), forKey: "highValue")
         record.setValue(Double(low), forKey: "lowValue")
         
-        cloudDB!.save(record, completionHandler: { cloudRecord, error in
+        cloudDB!.save(record, completionHandler: { cloudRecord, err in
             DispatchQueue.main.async {
-                if error != nil {
-                    print(error!)
-                    complete()
+                if err != nil {
+                    error(err as NSError?)
                 } else {
                     let pressure = NSEntityDescription.insertNewObject(forEntityName: "Pressure", into: self.managedObjectContext) as! Pressure
                     pressure.recordName = cloudRecord!.recordID.recordName
@@ -482,7 +480,7 @@ func dayTimeOfDate(_ date:Date?) -> String? {
                     pressure.highValue = Double(high)
                     pressure.lowValue = Double(low)
                     self.saveContext()
-                    complete()
+                    error(nil)
                 }
             }
         })
@@ -515,7 +513,7 @@ func dayTimeOfDate(_ date:Date?) -> String? {
     }
 
     func refreshPressure() {
-        let date = myLastPressureDate()
+        let date = myLastPressure()?.date
         let predicate = date == nil ? NSPredicate(value: true) : NSPredicate(format: "date > %@", date! as CVarArg)
         let query = CKQuery(recordType: "Pressure", predicate: predicate)
         
