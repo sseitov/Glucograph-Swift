@@ -559,7 +559,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vchannel.Glucograph;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "e356e5c3-1a29-47b8-a2c1-38d85b019a8b";
+				PROVISIONING_PROFILE = "a923bda8-cd81-4a7d-8903-5952ec492c46";
 				PROVISIONING_PROFILE_SPECIFIER = "Glucograph Development";
 				SWIFT_OBJC_BRIDGING_HEADER = "Glucograph/Glucograph-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
