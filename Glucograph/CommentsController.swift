@@ -23,6 +23,7 @@ class CommentsController: UIViewController, UITextViewDelegate {
     }
     
     override func goBack() {
+        commentsView.resignFirstResponder()
         dismiss(animated: true, completion: nil)
     }
     
@@ -33,14 +34,14 @@ class CommentsController: UIViewController, UITextViewDelegate {
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
-            textView.resignFirstResponder()
+            saveComments()
             return false
         } else {
             return true
         }
     }
     
-    @IBAction func saveComments(_ sender: Any) {
+    @IBAction func saveComments() {
         let text = commentsView.text != nil ? commentsView.text! : ""
         SVProgressHUD.show(withStatus: NSLocalizedString("Save...", comment: ""))
         Model.shared.saveComments(text, forObject: object, complete: {

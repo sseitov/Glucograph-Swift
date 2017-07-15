@@ -32,6 +32,7 @@
 		2C35CE711E73E1A300CE956B /* Pressure+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C35CE6D1E73E1A300CE956B /* Pressure+CoreDataClass.swift */; };
 		2C35CE721E73E1A300CE956B /* Pressure+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C35CE6E1E73E1A300CE956B /* Pressure+CoreDataProperties.swift */; };
 		2C35CE741E7412E700CE956B /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C35CE731E7412E700CE956B /* StringExtensions.swift */; };
+		2C53A4171F1A67CA003E2186 /* MainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C53A4161F1A67CA003E2186 /* MainController.swift */; };
 		2C7481C41E74404A001744F9 /* CommentsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7481C31E74404A001744F9 /* CommentsController.swift */; };
 		2C7481C61E74683A001744F9 /* PeriodControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7481C51E74683A001744F9 /* PeriodControl.swift */; };
 		2CA335591E747CD9005955D4 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA335581E747CD9005955D4 /* GraphView.swift */; };
@@ -82,6 +83,7 @@
 		2C35CE6D1E73E1A300CE956B /* Pressure+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Pressure+CoreDataClass.swift"; path = "Model/Pressure+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2C35CE6E1E73E1A300CE956B /* Pressure+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Pressure+CoreDataProperties.swift"; path = "Model/Pressure+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		2C35CE731E7412E700CE956B /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringExtensions.swift; path = Extensions/StringExtensions.swift; sourceTree = "<group>"; };
+		2C53A4161F1A67CA003E2186 /* MainController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainController.swift; sourceTree = "<group>"; };
 		2C7481C31E74404A001744F9 /* CommentsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsController.swift; sourceTree = "<group>"; };
 		2C7481C51E74683A001744F9 /* PeriodControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PeriodControl.swift; path = CustomViews/PeriodControl.swift; sourceTree = "<group>"; };
 		2CA335581E747CD9005955D4 /* GraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphView.swift; path = CustomViews/GraphView.swift; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 				2C0816BF1E72B893008794CF /* Custom Views */,
 				2C0816941E728D23008794CF /* Extensions */,
 				2C08167A1E728332008794CF /* AppDelegate.swift */,
+				2C53A4161F1A67CA003E2186 /* MainController.swift */,
 				2CFF85C01E733E7C00C3EB41 /* GlucController.swift */,
 				2C0816B61E72AACF008794CF /* NotesController.swift */,
 				2C7481C31E74404A001744F9 /* CommentsController.swift */,
@@ -394,6 +397,7 @@
 				2C0816C81E72B973008794CF /* Picker.swift in Sources */,
 				2C0816A61E728D5B008794CF /* LGProgressView.m in Sources */,
 				2C35CE721E73E1A300CE956B /* Pressure+CoreDataProperties.swift in Sources */,
+				2C53A4171F1A67CA003E2186 /* MainController.swift in Sources */,
 				2C0816AD1E728D86008794CF /* UIColorExtensions.swift in Sources */,
 				2CFF85BF1E73126A00C3EB41 /* Model.swift in Sources */,
 				2C0816B71E72AACF008794CF /* NotesController.swift in Sources */,

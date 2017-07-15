@@ -234,7 +234,7 @@ func dayTimeOfDate(_ date:Date?) -> String? {
     }
     
     private func minValue(values:[Double]) -> Double {
-        var minV = DBL_MAX
+        var minV = Double.greatestFiniteMagnitude
         for value in values {
             minV = min(minV, value)
         }
@@ -334,7 +334,7 @@ func dayTimeOfDate(_ date:Date?) -> String? {
         cloudDB!.perform(query, inZoneWith: nil) { results, error in
             guard error == nil else {
                 DispatchQueue.main.async {
-                    print("Cloud Query Error - Refresh: \(error)")
+                    print("Cloud Query Error - Refresh: \(error!.localizedDescription)")
                     complete()
                 }
                 return
@@ -356,7 +356,7 @@ func dayTimeOfDate(_ date:Date?) -> String? {
         cloudDB!.perform(query, inZoneWith: nil) { results, error in
             guard error == nil else {
                 DispatchQueue.main.async {
-                    print("Cloud Query Error - Refresh: \(error)")
+                    print("Cloud Query Error - Refresh: \(error!.localizedDescription)")
                 }
                 return
             }
@@ -520,7 +520,7 @@ func dayTimeOfDate(_ date:Date?) -> String? {
         cloudDB!.perform(query, inZoneWith: nil) { results, error in
             guard error == nil else {
                 DispatchQueue.main.async {
-                    print("Cloud Query Error - Refresh: \(error)")
+                    print("Cloud Query Error - Refresh: \(error!.localizedDescription)")
                 }
                 return
             }
