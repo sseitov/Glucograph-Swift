@@ -134,6 +134,16 @@ func dayTimeOfDate(_ date:Date?) -> String? {
     }
 }
 
+func dateString(_ date:Date?) -> String {
+    if date != nil {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d MMMM yyyy"
+        return formatter.string(from: date!)
+    } else {
+        return ""
+    }
+}
+
 // MARK: - Data model
 
 @objc class Model: NSObject {
@@ -316,9 +326,9 @@ func dayTimeOfDate(_ date:Date?) -> String? {
         }
     }
     
-    func myLastBlood() -> Blood? {
+    func myLastBlood(_ first:Bool = false) -> Blood? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Blood")
-        let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: first)
         fetchRequest.sortDescriptors = [sortDescriptor]
         fetchRequest.fetchLimit = 1
         if let all = try? managedObjectContext.fetch(fetchRequest) as! [Blood], let blood = all.first {
@@ -450,9 +460,9 @@ func dayTimeOfDate(_ date:Date?) -> String? {
     
     // MARK: - Pressure table
     
-    func myLastPressure() -> Pressure? {
+    func myLastPressure(_ first:Bool = false) -> Pressure? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pressure")
-        let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: first)
         fetchRequest.sortDescriptors = [sortDescriptor]
         fetchRequest.fetchLimit = 1
         if let all = try? managedObjectContext.fetch(fetchRequest) as! [Pressure], let pressure = all.first {

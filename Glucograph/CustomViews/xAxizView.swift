@@ -17,19 +17,7 @@ class xAxizView: UIView {
         case .monthDate:
             drawDays(rect)
         default:
-            break
-        }
-    }
-
-    func drawHours(_ rect: CGRect) {
-        var textRect = CGRect(x: 30, y: 0, width: 20, height: 20)
-        let stepX = (rect.size.width - 60) / CGFloat(GraphView.intervalCount())
-        var hour = 0
-        for _ in 0...GraphView.intervalCount() {
-            let text = "\(hour)" as NSString
-            text.draw(UIFont.condensedFont(12), color: UIColor.white, rect: textRect)
-            hour += 2
-            textRect.origin.x += stepX
+            drawStartEnd(rect)
         }
     }
     
@@ -61,6 +49,32 @@ class xAxizView: UIView {
             text.draw(UIFont.condensedFont(12), color: UIColor.white, rect: textRect)
             day += 2
             textRect.origin.x += stepX
+        }
+    }
+    
+    func drawStartEnd(_ rect: CGRect) {
+        if valueType() == .blood {
+            if let first = Model.shared.myLastBlood(true) {
+                let textRect = CGRect(x: 30, y: 0, width: 100, height: 20)
+                let text = dateString(first.date as Date?) as NSString
+                text.draw(UIFont.condensedFont(15), color: UIColor.white, rect: textRect, alignment:.left)
+            }
+            if let last = Model.shared.myLastBlood() {
+                let textRect = CGRect(x: bounds.size.width - 110, y: 0, width: 100, height: 20)
+                let text = dateString(last.date as Date?) as NSString
+                text.draw(UIFont.condensedFont(15), color: UIColor.white, rect: textRect, alignment:.right)
+            }
+        } else {
+            if let first = Model.shared.myLastPressure(true) {
+                let textRect = CGRect(x: 30, y: 0, width: 100, height: 20)
+                let text = dateString(first.date as Date?) as NSString
+                text.draw(UIFont.condensedFont(15), color: UIColor.white, rect: textRect, alignment:.left)
+            }
+            if let last = Model.shared.myLastPressure() {
+                let textRect = CGRect(x: bounds.size.width - 110, y: 0, width: 100, height: 20)
+                let text = dateString(last.date as Date?) as NSString
+                text.draw(UIFont.condensedFont(15), color: UIColor.white, rect: textRect, alignment:.right)
+            }
         }
     }
 }
