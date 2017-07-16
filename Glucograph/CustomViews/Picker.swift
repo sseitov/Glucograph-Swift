@@ -9,6 +9,7 @@
 import UIKit
 
 typealias CompletionBlock = (Int, Int) -> Void
+typealias MongthCompletionBlock = (Date?) -> Void
 
 class Picker: LGAlertView {
 
@@ -16,9 +17,33 @@ class Picker: LGAlertView {
 
     var pickerType:ValueType?
     
+    class func mongthChooser(_ completion: @escaping MongthCompletionBlock) -> Picker? {
+        if let pickerAlert = Bundle.main.loadNibNamed("Picker", owner: nil, options: nil)?.first as? Picker {
+            pickerAlert.pickerType = nil
+            pickerAlert.titleLabel.text = NSLocalizedString("MongthChooser", comment: "")
+            pickerAlert.cancelButton.isHidden = true
+            pickerAlert.otherButton.isHidden = true
+            
+            pickerAlert.otherButtonBlock = { alert in
+                pickerAlert.dismiss()
+                var comps = DateComponents()
+                comps.year = 2000 + pickerAlert.pickerView.selectedRow(inComponent: 1)
+                comps.month = pickerAlert.pickerView.selectedRow(inComponent: 0) + 1
+                completion(Calendar.current.date(from: comps))
+            }
+            pickerAlert.okButton.addTarget(pickerAlert, action: #selector(LGAlertView.didClickOther(_:)), for: .touchUpInside)
+            pickerAlert.pickerView.dataSource = pickerAlert
+            pickerAlert.pickerView.delegate = pickerAlert
+            return pickerAlert
+        } else {
+            return nil
+        }
+    }
+    
     class func createFor(type:ValueType, acceptHandler: @escaping CompletionBlock) -> Picker? {
         if let pickerAlert = Bundle.main.loadNibNamed("Picker", owner: nil, options: nil)?.first as? Picker {
             pickerAlert.pickerType = type
+            pickerAlert.okButton.isHidden = true
             if type == .blood {
                 pickerAlert.titleLabel.text = NSLocalizedString("Blood sugar level", comment: "")
             } else {
@@ -44,25 +69,39 @@ class Picker: LGAlertView {
     
     override func show() {
         super.show()
-        if pickerType == .blood {
-            let blood = Model.shared.myLastBlud()
-            if blood != nil {
-                let intVal = Int(blood!.value)
-                let decVal = Int((blood!.value - Double(intVal))*10)
-                pickerView.selectRow(33 - intVal, inComponent: 0, animated: false)
-                pickerView.selectRow(9 - decVal , inComponent: 1, animated: false)
+        if pickerType != nil {
+            if pickerType == .blood {
+                let blood = Model.shared.myLastBlood()
+                if blood != nil {
+                    let intVal = Int(blood!.value)
+                    let decVal = Int((blood!.value - Double(intVal))*10)
+                    pickerView.selectRow(33 - intVal, inComponent: 0, animated: false)
+                    pickerView.selectRow(9 - decVal , inComponent: 1, animated: false)
+                } else {
+                    pickerView.selectRow(26, inComponent: 0, animated: false)
+                    pickerView.selectRow(7, inComponent: 1, animated: false)
+                }
             } else {
-                pickerView.selectRow(26, inComponent: 0, animated: false)
-                pickerView.selectRow(7, inComponent: 1, animated: false)
+                let pressure = Model.shared.myLastPressure()
+                if pressure != nil {
+                    pickerView.selectRow(240 - Int(pressure!.highValue), inComponent: 0, animated: false)
+                    pickerView.selectRow(140 - Int(pressure!.lowValue), inComponent: 1, animated: false)
+                } else {
+                    pickerView.selectRow(120, inComponent: 0, animated: false)
+                    pickerView.selectRow(60, inComponent: 1, animated: false)
+                }
             }
         } else {
-            let pressure = Model.shared.myLastPressure()
-            if pressure != nil {
-                pickerView.selectRow(240 - Int(pressure!.highValue), inComponent: 0, animated: false)
-                pickerView.selectRow(140 - Int(pressure!.lowValue), inComponent: 1, animated: false)
-            } else {
-                pickerView.selectRow(120, inComponent: 0, animated: false)
-                pickerView.selectRow(60, inComponent: 1, animated: false)
+            var date = UserDefaults.standard.object(forKey: "PeriodDate") as? Date
+            if date == nil {
+                date = Date()
+            }
+            let comps = Calendar.current.dateComponents([.month, .year], from: date!)
+            if let m = comps.month {
+                pickerView.selectRow(m-1, inComponent: 0, animated: false)
+            }
+            if let y = comps.year {
+                pickerView.selectRow(y - 2000 , inComponent: 1, animated: false)
             }
         }
     }
@@ -81,9 +120,17 @@ extension Picker : UIPickerViewDataSource, UIPickerViewDelegate {
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if component == 1 {
-            return pickerType! == .blood ? 10 : 121
+            if pickerType != nil {
+                return pickerType! == .blood ? 10 : 121
+            } else {
+                return 100
+            }
         } else {
-            return pickerType! == .blood ? 32 : 141
+            if pickerType != nil {
+                return pickerType! == .blood ? 32 : 141
+            } else {
+                return 12
+            }
         }
     }
     
@@ -92,17 +139,30 @@ extension Picker : UIPickerViewDataSource, UIPickerViewDelegate {
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 40, height: 100))
-        label.font = UIFont.condensedFont(27)
-        if pickerType! == .blood {
-            label.textColor = UIColor.bloodColor()
+        
+        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 120, height: 100))
+        label.textAlignment = .center
+        if pickerType != nil {
+            label.font = UIFont.condensedFont(27)
+            if pickerType! == .blood {
+                label.textColor = UIColor.bloodColor()
+            } else {
+                label.textColor = component == 1 ? UIColor.mainColor() : UIColor.bloodColor()
+            }
+            if component == 1 {
+                label.text = pickerType! == .blood ? "\(9-row)" :  "\(140 - row)"
+            } else {
+                label.text = pickerType! == .blood ? "\(33 - row)." : "\(240 - row)"
+            }
         } else {
-            label.textColor = component == 1 ? UIColor.mainColor() : UIColor.bloodColor()
-        }
-        if component == 1 {
-            label.text = pickerType! == .blood ? "\(9-row)" :  "\(140 - row)"
-        } else {
-            label.text = pickerType! == .blood ? "\(33 - row)." : "\(240 - row)"
+            label.font = UIFont.condensedFont(21)
+            if component == 1 {
+                label.textColor = UIColor.black
+                label.text = "\(2000 + row)"
+            } else {
+                label.textColor = UIColor.mainColor()
+                label.text = Mongth(row+1).uppercased()
+            }
         }
         return label
     }

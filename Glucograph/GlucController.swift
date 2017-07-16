@@ -14,7 +14,6 @@ class GlucController: UIViewController {
     @IBOutlet weak var graphView: GraphView!
     @IBOutlet weak var xAxiz: xAxizView!
     @IBOutlet weak var yAxiz: yAxizView!
-//    @IBOutlet weak var periodControl: PeriodControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,38 +23,8 @@ class GlucController: UIViewController {
                                                selector: #selector(self.refresh),
                                                name: refreshNotification,
                                                object: nil)
-//        periodControl.selectedSegmentIndex = period().rawValue
     }
-/*
-    override func goBack() {
-        let alert = Picker.createFor(type: valueType(), acceptHandler: { val1, val2 in
-            self.periodControl.selectedSegmentIndex = Period.day.rawValue
-            changePeriod(.day)
-            SVProgressHUD.show(withStatus: NSLocalizedString("Add...", comment: ""))
-            if valueType() == .pressure {
-                Model.shared.addPressureAt(Date(), high: val1, low: val2, error: { err in
-                    SVProgressHUD.dismiss()
-                    if err != nil {
-                        self.showMessage(err!.localizedDescription, messageType: .error)
-                    } else {
-                        self.performSegue(withIdentifier: "notes", sender: nil)
-                    }
-                })
-            } else {
-                let value = Double(val1) + Double(val2)/10.0
-                Model.shared.addBloodAt(Date(), value: value, error: { err in
-                    SVProgressHUD.dismiss()
-                    if err != nil {
-                        self.showMessage(err!.localizedDescription, messageType: .error)
-                    } else {
-                        self.performSegue(withIdentifier: "notes", sender: nil)
-                    }
-                })
-            }
-        })
-        alert?.show()
-    }
-*/    
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         refresh()
@@ -64,10 +33,8 @@ class GlucController: UIViewController {
     func refresh() {
         if valueType() == .blood {
             graphView.objects = Model.shared.allBloodForPeriod(period())
-            Model.shared.refreshBlood()
         } else {
             graphView.objects = Model.shared.allPressureForPeriod(period())
-            Model.shared.refreshPressure()
         }
         let range = Model.shared.minMaxRange()
         graphView.range = range

@@ -23,6 +23,8 @@ typedef enum : NSUInteger {
 
 @interface LGAlertView : UIView <UIPopoverPresentationControllerDelegate>
 
+- (IBAction)didClickOther:(id)sender;
+
 /**
  * If you don't set superView, the superView is keyWindow by default.
  * Otherwise, you MUST set it BEFORE alertView has shown.

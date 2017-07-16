@@ -74,7 +74,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="O92-0h-szo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3868" y="314"/>
+            <point key="canvasLocation" x="3627" y="256"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="OPE-LE-Mq4">
@@ -116,8 +116,6 @@
                                     <constraint firstAttribute="height" constant="28" id="Jh4-6c-8if"/>
                                 </constraints>
                                 <segments>
-                                    <segment title=""/>
-                                    <segment title=""/>
                                     <segment title=""/>
                                     <segment title=""/>
                                     <segment title=""/>

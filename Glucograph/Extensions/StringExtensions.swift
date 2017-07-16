@@ -8,6 +8,10 @@
 
 import Foundation
 
+func LOCALIZE(_ text:String) -> String {
+    return NSLocalizedString(text, comment: "")
+}
+
 extension String {
     
     func partInRange(_ start:Int, end:Int) -> String {

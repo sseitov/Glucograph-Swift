@@ -8,11 +8,13 @@
 
 "Blood" = "Blood";
 "Pressure" = "Pressure";
+"MongthChooser" = "Choose Mongth";
 "Today" = "Today";
-"Week" = "Week";
+"Week" = "Last Week";
+"Mongth" = "Mongth";
 "This Mongth" = "This Mongth";
 "Last Mongth" = "Last Mongth";
-"All" = "All";
+"All" = "All data";
 "Blood sugar level" = "Blood sugar level";
 "Pressure" = "Pressure";
 "Migration..." = "Migration...";
@@ -27,3 +29,15 @@
 "day5" = "thurs";
 "day6" = "friday";
 "day7" = "saturday";
+"January" = "January";
+"February" = "February";
+"March" = "March";
+"April" = "April";
+"May" = "May";
+"June" = "June";
+"July" = "July";
+"August" = "August";
+"September" = "September";
+"October" = "October";
+"November" = "November";
+"December" = "December";

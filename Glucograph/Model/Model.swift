@@ -27,15 +27,47 @@ func valueType() -> ValueType {
 }
 
 enum Period:Int {
-    case day = 0
-    case week = 1
-    case mongth = 2
-    case lastMongth = 3
-    case all = 4
+    case week = 0
+    case monthDate = 1
+    case all = 2
 }
 
-func changePeriod(_ period:Period) {
+func Mongth(_ m:Int) -> String {
+    switch m {
+    case 1:
+        return LOCALIZE("January")
+    case 2:
+        return LOCALIZE("February")
+    case 3:
+        return LOCALIZE("March")
+    case 4:
+        return LOCALIZE("April")
+    case 5:
+        return LOCALIZE("May")
+    case 6:
+        return LOCALIZE("June")
+    case 7:
+        return LOCALIZE("July")
+    case 8:
+        return LOCALIZE("August")
+    case 9:
+        return LOCALIZE("September")
+    case 10:
+        return LOCALIZE("October")
+    case 11:
+        return LOCALIZE("November")
+    case 12:
+        return LOCALIZE("December")
+    default:
+        return ""
+    }
+}
+
+func changePeriod(_ period:Period, date:Date? = nil) {
     UserDefaults.standard.set(period.rawValue, forKey: "Period")
+    if period == .monthDate && date != nil {
+        UserDefaults.standard.set(date, forKey: "PeriodDate")
+    }
     UserDefaults.standard.synchronize()
 }
 
@@ -43,33 +75,28 @@ func period() -> Period {
     return Period(rawValue: UserDefaults.standard.integer(forKey: "Period"))!
 }
 
+func periodDate() -> Date? {
+    return UserDefaults.standard.object(forKey: "PeriodDate") as? Date
+}
+
 // MARK: - Date manipulations
 
-func today() -> Date? {
-//    let components = DateComponents(year: 2016, month: 12, day: 30, hour: 9, minute: 0)
-//    return Calendar.current.date(from: components)
-    return Calendar.current.startOfDay(for: Date())
+func startOfDay(_ date: Date) -> Date? {
+    return Calendar.current.startOfDay(for: date)
+}
+
+func endOfMonth(_ date: Date) -> Date? {
+    if let next = Calendar.current.date(byAdding: .month, value: 1, to: date) {
+        return startOfDay(next)
+    } else {
+        return date
+    }
 }
 
 func lastWeek() -> Date? {
-    if let date = today(), let monday = Calendar.current.date(bySetting: .weekday, value: Calendar.current.firstWeekday, of: date) {
+    
+    if let date = startOfDay(Date()), let monday = Calendar.current.date(bySetting: .weekday, value: Calendar.current.firstWeekday, of: date) {
         return Calendar.current.date(byAdding: .day, value: -7, to: monday)
-    } else {
-        return nil
-    }
-}
-
-func lastMongth() -> Date? {
-    if let date = today() , let firstDay = Calendar.current.date(bySetting: .day, value: 1, of: date) {
-        return Calendar.current.date(byAdding: .month, value: -1, to: firstDay)
-    } else {
-        return nil
-    }
-}
-
-func previouseMongth() -> Date? {
-    if let date = today() , let firstDay = Calendar.current.date(bySetting: .day, value: 1, of: date) {
-        return Calendar.current.date(byAdding: .month, value: -2, to: firstDay)
     } else {
         return nil
     }
@@ -289,7 +316,7 @@ func dayTimeOfDate(_ date:Date?) -> String? {
         }
     }
     
-    func myLastBlud() -> Blood? {
+    func myLastBlood() -> Blood? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Blood")
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
         fetchRequest.sortDescriptors = [sortDescriptor]
@@ -349,7 +376,7 @@ func dayTimeOfDate(_ date:Date?) -> String? {
     }
     
     func refreshBlood() {
-        let date = myLastBlud()?.date
+        let date = myLastBlood()?.date
         let predicate = date == nil ? NSPredicate(value: true) : NSPredicate(format: "date > %@", date! as CVarArg)
         let query = CKQuery(recordType: "Blood", predicate: predicate)
 
@@ -398,16 +425,16 @@ func dayTimeOfDate(_ date:Date?) -> String? {
     func allBloodForPeriod(_ period:Period) -> [Blood] {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Blood")
         switch period {
-        case .day:
-            fetchRequest.predicate = NSPredicate(format: "date > %@", today()! as CVarArg)
         case .week:
             fetchRequest.predicate = NSPredicate(format: "date > %@", lastWeek()! as CVarArg)
-        case .mongth:
-            fetchRequest.predicate = NSPredicate(format: "date > %@", lastMongth()! as CVarArg)
-        case .lastMongth:
-            let pred1 = NSPredicate(format: "date > %@", previouseMongth()! as CVarArg)
-            let pred2 = NSPredicate(format: "date < %@", lastMongth()! as CVarArg)
-            fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [pred1, pred2])
+        case .monthDate:
+            if let date = UserDefaults.standard.object(forKey: "PeriodDate") as? Date {
+                let pred1 = NSPredicate(format: "date > %@", startOfDay(date)! as CVarArg)
+                let pred2 = NSPredicate(format: "date < %@", endOfMonth(date)! as CVarArg)
+                fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [pred1, pred2])
+            } else {
+                return []
+            }
         default:
             break
         }
@@ -438,16 +465,16 @@ func dayTimeOfDate(_ date:Date?) -> String? {
     func allPressureForPeriod(_ period:Period) -> [Pressure] {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pressure")
         switch period {
-        case .day:
-            fetchRequest.predicate = NSPredicate(format: "date > %@", today()! as CVarArg)
         case .week:
             fetchRequest.predicate = NSPredicate(format: "date > %@", lastWeek()! as CVarArg)
-        case .mongth:
-            fetchRequest.predicate = NSPredicate(format: "date > %@", lastMongth()! as CVarArg)
-        case .lastMongth:
-            let pred1 = NSPredicate(format: "date > %@", previouseMongth()! as CVarArg)
-            let pred2 = NSPredicate(format: "date < %@", lastMongth()! as CVarArg)
-            fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [pred1, pred2])
+        case .monthDate:
+            if let date = UserDefaults.standard.object(forKey: "PeriodDate") as? Date {
+                let pred1 = NSPredicate(format: "date > %@", startOfDay(date)! as CVarArg)
+                let pred2 = NSPredicate(format: "date < %@", endOfMonth(date)! as CVarArg)
+                fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [pred1, pred2])
+            } else {
+                return []
+            }
         default:
             break
         }

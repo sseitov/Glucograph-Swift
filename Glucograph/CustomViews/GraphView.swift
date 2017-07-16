@@ -21,12 +21,9 @@ class GraphView: UIView {
     private var gradient:CGGradient?
     
     class func intervalCount() -> Int {
-        switch period() {
-        case .day:
-            return 12
-        case .week:
+        if period() == .week {
             return 6
-        default:
+        } else {
             return 15
         }
     }
@@ -105,18 +102,14 @@ class GraphView: UIView {
         var startTime:TimeInterval = 0
         
         switch period() {
-        case .day:
-            timeLength = secondsPerDay
-            startTime = today()!.timeIntervalSince1970
         case .week:
             timeLength = secondsPerWeek
             startTime = lastWeek()!.timeIntervalSince1970
-        case .mongth:
-            timeLength = secondsPerMonth
-            startTime = lastMongth()!.timeIntervalSince1970
-        case .lastMongth:
-            timeLength = secondsPerMonth
-            startTime = previouseMongth()!.timeIntervalSince1970
+        case .monthDate:
+            if let date = UserDefaults.standard.value(forKey: "PeriodDate") as? Date {
+                timeLength = secondsPerMonth
+                startTime = date.timeIntervalSince1970
+            }
         case .all:
             timeLength = Model.shared.objectDate(objects[0])!.timeIntervalSince1970 - Model.shared.objectDate(objects.last!)!.timeIntervalSince1970
             startTime = Model.shared.objectDate(objects.last!)!.timeIntervalSince1970

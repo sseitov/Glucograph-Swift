@@ -25,18 +25,15 @@ class MainController: UIViewController {
         
         setupBackButton()
         setupType(valueType())
-/*
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(self.refresh),
-                                               name: refreshNotification,
-                                               object: nil)
- */
+        
         periodControl.selectedSegmentIndex = period().rawValue
+        
+        Model.shared.refreshBlood()
+        Model.shared.refreshPressure()
     }
+    
     override func goBack() {
         let alert = Picker.createFor(type: valueType(), acceptHandler: { val1, val2 in
-            self.periodControl.selectedSegmentIndex = Period.day.rawValue
-            changePeriod(.day)
             SVProgressHUD.show(withStatus: NSLocalizedString("Add...", comment: ""))
             if valueType() == .pressure {
                 Model.shared.addPressureAt(Date(), high: val1, low: val2, error: { err in

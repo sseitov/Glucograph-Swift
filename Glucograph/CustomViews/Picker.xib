@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -72,11 +72,24 @@
                                 <action selector="didClickOther:" destination="P1T-Ue-szz" eventType="touchUpInside" id="dMn-vG-WLA"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Cc-fJ-Eg0">
+                            <rect key="frame" x="80" y="250" width="120" height="36"/>
+                            <color key="backgroundColor" red="0.27450980390000002" green="0.4823529412" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="36" id="1ep-Fl-eot"/>
+                                <constraint firstAttribute="width" constant="120" id="OFM-3r-1j5"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="17"/>
+                            <state key="normal" title="Ok">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="0Nv-q4-7vw" secondAttribute="bottom" constant="14" id="41W-fy-34f"/>
                         <constraint firstAttribute="height" constant="300" id="LXp-3y-SgV"/>
+                        <constraint firstItem="6Cc-fJ-Eg0" firstAttribute="centerX" secondItem="vLE-9x-YcJ" secondAttribute="centerX" id="PHB-ad-tQ6"/>
                         <constraint firstItem="GYt-NO-JTZ" firstAttribute="top" secondItem="SFQ-08-2qI" secondAttribute="bottom" constant="2" id="XI1-rt-g8Q"/>
                         <constraint firstItem="cbF-qI-lrD" firstAttribute="leading" secondItem="vLE-9x-YcJ" secondAttribute="leading" constant="20" id="XcZ-LN-JGb"/>
                         <constraint firstAttribute="trailing" secondItem="SFQ-08-2qI" secondAttribute="trailing" constant="20" id="bH8-M7-bMd"/>
@@ -88,6 +101,7 @@
                         <constraint firstAttribute="width" constant="280" id="rdg-8k-fiO"/>
                         <constraint firstAttribute="bottom" secondItem="cbF-qI-lrD" secondAttribute="bottom" constant="14" id="sag-Nh-zUa"/>
                         <constraint firstItem="SFQ-08-2qI" firstAttribute="top" secondItem="vLE-9x-YcJ" secondAttribute="top" constant="20" id="tmJ-DD-JeR"/>
+                        <constraint firstAttribute="bottom" secondItem="6Cc-fJ-Eg0" secondAttribute="bottom" constant="14" id="vuc-YL-VAb"/>
                     </constraints>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -104,6 +118,7 @@
             <connections>
                 <outlet property="cancelButton" destination="cbF-qI-lrD" id="l94-vx-Xww"/>
                 <outlet property="containerView" destination="vLE-9x-YcJ" id="wxu-56-nSA"/>
+                <outlet property="okButton" destination="6Cc-fJ-Eg0" id="SOV-7M-usr"/>
                 <outlet property="otherButton" destination="0Nv-q4-7vw" id="XnO-GY-Y1P"/>
                 <outlet property="pickerView" destination="GYt-NO-JTZ" id="s8U-7j-lVh"/>
                 <outlet property="titleLabel" destination="SFQ-08-2qI" id="fII-BF-Qlx"/>

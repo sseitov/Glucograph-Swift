@@ -22,6 +22,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
+        let comps = Calendar.current.dateComponents([.month, .year], from: Date())
+        let date = Calendar.current.date(from: comps)
+        changePeriod(.monthDate, date: date)
+        changePeriod(.all)
+        
         SVProgressHUD.setDefaultStyle(.custom)
         SVProgressHUD.setBackgroundColor(UIColor.mainColor())
         SVProgressHUD.setForegroundColor(UIColor.white)

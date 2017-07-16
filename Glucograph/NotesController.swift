@@ -37,10 +37,8 @@ class NotesController: UIViewController, UITableViewDelegate, UITableViewDataSou
     func refresh() {
         if valueType() == .blood {
             bloods = Model.shared.allBloodForPeriod(period())
-            Model.shared.refreshBlood()
         } else {
             pressures = Model.shared.allPressureForPeriod(period())
-            Model.shared.refreshPressure()
         }
         tableView.reloadData()
     }

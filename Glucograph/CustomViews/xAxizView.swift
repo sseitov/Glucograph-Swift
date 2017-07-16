@@ -12,11 +12,9 @@ class xAxizView: UIView {
 
     override func draw(_ rect: CGRect) {
         switch period() {
-        case .day:
-            drawHours(rect)
         case .week:
             drawWeekDays(rect)
-        case .mongth, .lastMongth:
+        case .monthDate:
             drawDays(rect)
         default:
             break
