@@ -116,13 +116,18 @@ class SyncManager: NSObject {
             DispatchQueue.main.async {
                 if results != nil {
                     for record in results! {
-                        let blood = NSEntityDescription.insertNewObject(forEntityName: "Blood",
-                                                                        into: Model.shared.managedObjectContext) as! Blood
-                        blood.date = record.value(forKey: "date") as? NSDate
-                        blood.value = record.value(forKey: "value") as! Double
-                        blood.comments = record.value(forKey: "comments") as? String
-                        blood.recordName = record.recordID.recordName
-                        blood.synced = true
+                        if let date = record.value(forKey: "date") as? NSDate {
+                            var blood = Model.shared.bloodForDate(date)
+                            if blood == nil {
+                                blood = NSEntityDescription.insertNewObject(forEntityName: "Blood",
+                                                                                into: Model.shared.managedObjectContext) as? Blood
+                                blood!.date = date
+                            }
+                            blood!.value = record.value(forKey: "value") as! Double
+                            blood!.comments = record.value(forKey: "comments") as? String
+                            blood!.recordName = record.recordID.recordName
+                            blood!.synced = true
+                        }
                     }
                     Model.shared.saveContext()
                 }
@@ -147,14 +152,19 @@ class SyncManager: NSObject {
             DispatchQueue.main.async {
                 if results != nil {
                     for record in results! {
-                        let pressure = NSEntityDescription.insertNewObject(forEntityName: "Pressure",
-                                                                           into: Model.shared.managedObjectContext) as! Pressure
-                        pressure.date = record.value(forKey: "date") as? NSDate
-                        pressure.highValue = record.value(forKey: "highValue") as! Double
-                        pressure.lowValue = record.value(forKey: "lowValue") as! Double
-                        pressure.comments = record.value(forKey: "comments") as? String
-                        pressure.recordName = record.recordID.recordName
-                        pressure.synced = true
+                        if let date = record.value(forKey: "date") as? NSDate {
+                            var pressure = Model.shared.pressureForDate(date)
+                            if pressure == nil {
+                                pressure = NSEntityDescription.insertNewObject(forEntityName: "Pressure",
+                                                                               into: Model.shared.managedObjectContext) as? Pressure
+                                pressure!.date = date
+                            }
+                            pressure!.highValue = record.value(forKey: "highValue") as! Double
+                            pressure!.lowValue = record.value(forKey: "lowValue") as! Double
+                            pressure!.comments = record.value(forKey: "comments") as? String
+                            pressure!.recordName = record.recordID.recordName
+                            pressure!.synced = true
+                        }
                     }
                     Model.shared.saveContext()
                 }

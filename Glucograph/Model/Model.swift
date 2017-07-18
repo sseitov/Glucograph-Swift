@@ -324,6 +324,16 @@ func dateString(_ date:Date?) -> String {
         }
     }
     
+    func bloodForDate(_ date:NSDate) -> Blood? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Blood")
+        fetchRequest.predicate = NSPredicate(format: "date == %@", date)
+        if let all = try? managedObjectContext.fetch(fetchRequest) {
+            return all.first as? Blood
+        } else {
+            return nil
+        }
+    }
+    
     func nonSyncedBloods() -> [Blood] {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Blood")
         fetchRequest.predicate = NSPredicate(format: "synced == %@", NSNumber(booleanLiteral: false))
@@ -384,6 +394,16 @@ func dateString(_ date:Date?) -> String {
         self.saveContext()
     }
     
+    func pressureForDate(_ date:NSDate) -> Pressure? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pressure")
+        fetchRequest.predicate = NSPredicate(format: "date == %@", date)
+        if let all = try? managedObjectContext.fetch(fetchRequest) {
+            return all.first as? Pressure
+        } else {
+            return nil
+        }
+    }
+
     func nonSyncedPressures() -> [Pressure] {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pressure")
         fetchRequest.predicate = NSPredicate(format: "synced == %@", NSNumber(booleanLiteral: false))
