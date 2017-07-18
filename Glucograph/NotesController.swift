@@ -84,28 +84,6 @@ class NotesController: UIViewController, UITableViewDelegate, UITableViewDataSou
         }
         return cell
     }
-
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            let object = valueType() == .blood ? bloods[indexPath.row] : pressures[indexPath.row]
-            SVProgressHUD.show(withStatus: NSLocalizedString("Delete...", comment: ""))
-            Model.shared.deleteObject(object, complete: {
-                SVProgressHUD.dismiss()
-                self.tableView.beginUpdates()
-                if valueType() == .blood {
-                    self.bloods.remove(at: indexPath.row)
-                } else {
-                    self.pressures.remove(at: indexPath.row)
-                }
-                self.tableView.deleteRows(at: [indexPath], with: .top)
-                self.tableView.endUpdates()
-            })
-        }
-    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "comments" {

@@ -43,11 +43,10 @@ class CommentsController: UIViewController, UITextViewDelegate {
     
     @IBAction func saveComments() {
         let text = commentsView.text != nil ? commentsView.text! : ""
-        SVProgressHUD.show(withStatus: NSLocalizedString("Save...", comment: ""))
-        Model.shared.saveComments(text, forObject: object, complete: {
-            SVProgressHUD.dismiss()
-            self.goBack()
-        })
+        Model.shared.saveComments(text, forObject: object)
+        NotificationCenter.default.post(name: refreshNotification, object: nil)
+        SyncManager.shared.upload()
+        self.goBack()
     }
 
 }

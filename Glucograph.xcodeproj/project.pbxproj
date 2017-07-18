@@ -23,7 +23,6 @@
 		2C0816F41E72D772008794CF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C0816F01E72D772008794CF /* LaunchScreen.storyboard */; };
 		2C0816F51E72D772008794CF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C0816F21E72D772008794CF /* Main.storyboard */; };
 		2C0816F81E72E21E008794CF /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2C0816FA1E72E21E008794CF /* Localizable.strings */; };
-		2C0816FF1E72EBE5008794CF /* MigrationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C0816FE1E72EBE5008794CF /* MigrationManager.m */; };
 		2C0817011E72EC0A008794CF /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C0817001E72EC0A008794CF /* libsqlite3.tbd */; };
 		2C0817081E72FEED008794CF /* LocalCache.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2C0817061E72FEED008794CF /* LocalCache.xcdatamodeld */; };
 		2C35CE6A1E73D71B00CE956B /* NotesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C35CE691E73D71B00CE956B /* NotesCell.swift */; };
@@ -35,6 +34,8 @@
 		2C53A4171F1A67CA003E2186 /* MainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C53A4161F1A67CA003E2186 /* MainController.swift */; };
 		2C7481C41E74404A001744F9 /* CommentsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7481C31E74404A001744F9 /* CommentsController.swift */; };
 		2C7481C61E74683A001744F9 /* PeriodControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7481C51E74683A001744F9 /* PeriodControl.swift */; };
+		2C7E6EF11F1DDD30002CB4A1 /* SyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7E6EF01F1DDD30002CB4A1 /* SyncManager.swift */; };
+		2C7E6EF51F1DE0ED002CB4A1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C7E6EF41F1DE0ED002CB4A1 /* Reachability.m */; };
 		2CA335591E747CD9005955D4 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA335581E747CD9005955D4 /* GraphView.swift */; };
 		2CA3355B1E747D7B005955D4 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA3355A1E747D7B005955D4 /* UIViewExtensions.swift */; };
 		2CA3355D1E749A47005955D4 /* xAxizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA3355C1E749A47005955D4 /* xAxizView.swift */; };
@@ -72,10 +73,7 @@
 		2C0816F31E72D772008794CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2C0816F91E72E21E008794CF /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2C0816FB1E72E223008794CF /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
-		2C0816FD1E72EBE5008794CF /* MigrationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MigrationManager.h; path = Model/MigrationManager.h; sourceTree = "<group>"; };
-		2C0816FE1E72EBE5008794CF /* MigrationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MigrationManager.m; path = Model/MigrationManager.m; sourceTree = "<group>"; };
 		2C0817001E72EC0A008794CF /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
-		2C0817021E72ECA0008794CF /* SynthesizeSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SynthesizeSingleton.h; path = Model/SynthesizeSingleton.h; sourceTree = "<group>"; };
 		2C0817071E72FEED008794CF /* LocalCache.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LocalCache.xcdatamodel; sourceTree = "<group>"; };
 		2C35CE691E73D71B00CE956B /* NotesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesCell.swift; sourceTree = "<group>"; };
 		2C35CE6B1E73E1A300CE956B /* Blood+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Blood+CoreDataClass.swift"; path = "Model/Blood+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -86,6 +84,10 @@
 		2C53A4161F1A67CA003E2186 /* MainController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainController.swift; sourceTree = "<group>"; };
 		2C7481C31E74404A001744F9 /* CommentsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommentsController.swift; sourceTree = "<group>"; };
 		2C7481C51E74683A001744F9 /* PeriodControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PeriodControl.swift; path = CustomViews/PeriodControl.swift; sourceTree = "<group>"; };
+		2C7E6EEF1F1DD76C002CB4A1 /* LocalCache 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LocalCache 2.xcdatamodel"; sourceTree = "<group>"; };
+		2C7E6EF01F1DDD30002CB4A1 /* SyncManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncManager.swift; sourceTree = "<group>"; };
+		2C7E6EF31F1DE0ED002CB4A1 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
+		2C7E6EF41F1DE0ED002CB4A1 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		2CA335581E747CD9005955D4 /* GraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphView.swift; path = CustomViews/GraphView.swift; sourceTree = "<group>"; };
 		2CA3355A1E747D7B005955D4 /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIViewExtensions.swift; path = Extensions/UIViewExtensions.swift; sourceTree = "<group>"; };
 		2CA3355C1E749A47005955D4 /* xAxizView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = xAxizView.swift; path = CustomViews/xAxizView.swift; sourceTree = "<group>"; };
@@ -141,12 +143,13 @@
 				2C0816FC1E72EB88008794CF /* Model */,
 				2C0816BF1E72B893008794CF /* Custom Views */,
 				2C0816941E728D23008794CF /* Extensions */,
-				2C08167A1E728332008794CF /* AppDelegate.swift */,
+				2C7E6EF21F1DE0A7002CB4A1 /* iCloud Sync */,
 				2C53A4161F1A67CA003E2186 /* MainController.swift */,
 				2CFF85C01E733E7C00C3EB41 /* GlucController.swift */,
 				2C0816B61E72AACF008794CF /* NotesController.swift */,
 				2C7481C31E74404A001744F9 /* CommentsController.swift */,
 				2C35CE691E73D71B00CE956B /* NotesCell.swift */,
+				2C08167A1E728332008794CF /* AppDelegate.swift */,
 				2C0816911E728707008794CF /* Resources */,
 			);
 			path = Glucograph;
@@ -215,12 +218,19 @@
 				2C35CE6C1E73E1A300CE956B /* Blood+CoreDataProperties.swift */,
 				2C35CE6D1E73E1A300CE956B /* Pressure+CoreDataClass.swift */,
 				2C35CE6E1E73E1A300CE956B /* Pressure+CoreDataProperties.swift */,
-				2C0817021E72ECA0008794CF /* SynthesizeSingleton.h */,
-				2C0816FD1E72EBE5008794CF /* MigrationManager.h */,
-				2C0816FE1E72EBE5008794CF /* MigrationManager.m */,
 				2CFF85BE1E73126A00C3EB41 /* Model.swift */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		2C7E6EF21F1DE0A7002CB4A1 /* iCloud Sync */ = {
+			isa = PBXGroup;
+			children = (
+				2C7E6EF01F1DDD30002CB4A1 /* SyncManager.swift */,
+				2C7E6EF31F1DE0ED002CB4A1 /* Reachability.h */,
+				2C7E6EF41F1DE0ED002CB4A1 /* Reachability.m */,
+			);
+			name = "iCloud Sync";
 			sourceTree = "<group>";
 		};
 		2DA0E94539DB0DA08288B0B1 /* Frameworks */ = {
@@ -386,7 +396,6 @@
 			files = (
 				2C0816AF1E728D86008794CF /* UIViewControllerExtensions.swift in Sources */,
 				2C0816A21E728D5B008794CF /* LGAlertView.m in Sources */,
-				2C0816FF1E72EBE5008794CF /* MigrationManager.m in Sources */,
 				2CA335591E747CD9005955D4 /* GraphView.swift in Sources */,
 				2CA3355B1E747D7B005955D4 /* UIViewExtensions.swift in Sources */,
 				2C35CE741E7412E700CE956B /* StringExtensions.swift in Sources */,
@@ -395,12 +404,14 @@
 				2C0816AE1E728D86008794CF /* UIFontExtensions.swift in Sources */,
 				2C35CE711E73E1A300CE956B /* Pressure+CoreDataClass.swift in Sources */,
 				2C0816C81E72B973008794CF /* Picker.swift in Sources */,
+				2C7E6EF51F1DE0ED002CB4A1 /* Reachability.m in Sources */,
 				2C0816A61E728D5B008794CF /* LGProgressView.m in Sources */,
 				2C35CE721E73E1A300CE956B /* Pressure+CoreDataProperties.swift in Sources */,
 				2C53A4171F1A67CA003E2186 /* MainController.swift in Sources */,
 				2C0816AD1E728D86008794CF /* UIColorExtensions.swift in Sources */,
 				2CFF85BF1E73126A00C3EB41 /* Model.swift in Sources */,
 				2C0816B71E72AACF008794CF /* NotesController.swift in Sources */,
+				2C7E6EF11F1DDD30002CB4A1 /* SyncManager.swift in Sources */,
 				2C0817081E72FEED008794CF /* LocalCache.xcdatamodeld in Sources */,
 				2C35CE6F1E73E1A300CE956B /* Blood+CoreDataClass.swift in Sources */,
 				2CFF85C11E733E7C00C3EB41 /* GlucController.swift in Sources */,
@@ -618,9 +629,10 @@
 		2C0817061E72FEED008794CF /* LocalCache.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				2C7E6EEF1F1DD76C002CB4A1 /* LocalCache 2.xcdatamodel */,
 				2C0817071E72FEED008794CF /* LocalCache.xcdatamodel */,
 			);
-			currentVersion = 2C0817071E72FEED008794CF /* LocalCache.xcdatamodel */;
+			currentVersion = 2C7E6EEF1F1DD76C002CB4A1 /* LocalCache 2.xcdatamodel */;
 			name = LocalCache.xcdatamodeld;
 			path = Model/LocalCache.xcdatamodeld;
 			sourceTree = "<group>";

@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-import CloudKit
 
 // MARK: - Current settings
 
@@ -149,15 +148,6 @@ func dateString(_ date:Date?) -> String {
 @objc class Model: NSObject {
     
     static let shared = Model()
-
-    private var cloudDB: CKDatabase?
-
-    private override init() {
-        super.init()
-
-        let container = CKContainer.default()
-        cloudDB = container.privateCloudDatabase
-    }
     
     // MARK: - CoreData stack
 
@@ -200,7 +190,7 @@ func dateString(_ date:Date?) -> String {
     }
     
     // MARK: - Common methods
-    
+
     func objectDate(_ obj:NSManagedObject?) -> NSDate? {
         if (valueType() == .blood) {
             return (obj as! Blood).date
@@ -217,57 +207,17 @@ func dateString(_ date:Date?) -> String {
         }
     }
    
-    func saveComments(_ comments:String, forObject:NSManagedObject?, complete: @escaping() -> ()) {
-        var recordID:CKRecordID?
+    func saveComments(_ comments:String, forObject:NSManagedObject?) {
         if valueType() == .blood {
             let blood = forObject as! Blood
-            let recordZoneID = CKRecordZoneID(zoneName: blood.zoneName!, ownerName: blood.ownerName!)
-            recordID = CKRecordID(recordName: blood.recordName!, zoneID: recordZoneID)
             blood.comments = comments
-            saveContext()
+            blood.synced = false
         } else {
             let pressure = forObject as! Pressure
-            let recordZoneID = CKRecordZoneID(zoneName: pressure.zoneName!, ownerName: pressure.ownerName!)
-            recordID = CKRecordID(recordName: pressure.recordName!, zoneID: recordZoneID)
             pressure.comments = comments
-            saveContext()
+            pressure.synced = false
         }
-        
-        cloudDB?.fetch(withRecordID: recordID!, completionHandler: { record, error in
-            if error == nil && record != nil {
-                record!.setValue(comments, forKey: "comments")
-                self.cloudDB!.save(record!, completionHandler: { _, error in
-                    DispatchQueue.main.async {
-                        complete()
-                    }
-                })
-            } else {
-                DispatchQueue.main.async {
-                    complete()
-                }
-            }
-        })
-
-    }
-    
-    func deleteObject(_ object:NSManagedObject?, complete: @escaping() -> ()) {
-        var recordID:CKRecordID?
-        if valueType() == .blood {
-            let blood = object as! Blood
-            let recordZoneID = CKRecordZoneID(zoneName: blood.zoneName!, ownerName: blood.ownerName!)
-            recordID = CKRecordID(recordName: blood.recordName!, zoneID: recordZoneID)
-        } else {
-            let pressure = object as! Pressure
-            let recordZoneID = CKRecordZoneID(zoneName: pressure.zoneName!, ownerName: pressure.ownerName!)
-            recordID = CKRecordID(recordName: pressure.recordName!, zoneID: recordZoneID)
-        }
-        managedObjectContext.delete(object!)
         saveContext()
-        cloudDB!.delete(withRecordID: recordID!, completionHandler: { record, error in
-            DispatchQueue.main.async {
-                complete()
-            }
-        })
     }
     
     private func minValue(values:[Double]) -> Double {
@@ -328,6 +278,7 @@ func dateString(_ date:Date?) -> String {
     
     func myLastBlood(_ first:Bool = false) -> Blood? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Blood")
+        fetchRequest.predicate = NSPredicate(format: "synced == %@", NSNumber(booleanLiteral: true))
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: first)
         fetchRequest.sortDescriptors = [sortDescriptor]
         fetchRequest.fetchLimit = 1
@@ -338,98 +289,13 @@ func dateString(_ date:Date?) -> String {
         }
     }
 
-    func addBloodAt(_ date:Date, value:Double, comments:String = "", error: @escaping(NSError?) -> ()) {
-        let record = CKRecord(recordType: "Blood")
-        record.setValue(date, forKey: "date")
-        record.setValue(value, forKey: "value")
-        record.setValue(comments, forKey: "comments")
-        
-        cloudDB!.save(record, completionHandler: { cloudRecord, err in
-            DispatchQueue.main.async {
-                if err != nil {
-                    error(err as NSError?)
-                } else {
-                    let blood = NSEntityDescription.insertNewObject(forEntityName: "Blood", into: self.managedObjectContext) as! Blood
-                    blood.recordName = cloudRecord!.recordID.recordName
-                    blood.zoneName = cloudRecord!.recordID.zoneID.zoneName
-                    blood.ownerName = cloudRecord!.recordID.zoneID.ownerName
-                    blood.date = date as NSDate?
-                    blood.value = value
-                    blood.comments = comments
-                    self.saveContext()
-                    error(nil)
-                }
-            }
-        })
-
-    }
-    
-    func migrateBlood(_ complete: @escaping() -> ()) {
-        let predicate = NSPredicate(value: true)
-        let query = CKQuery(recordType: "Blood", predicate: predicate)
-
-        cloudDB!.perform(query, inZoneWith: nil) { results, error in
-            guard error == nil else {
-                DispatchQueue.main.async {
-                    print("Cloud Query Error - Refresh: \(error!.localizedDescription)")
-                    complete()
-                }
-                return
-            }
-            DispatchQueue.main.async {
-                for record in results! {
-                    self.addBlood(record)
-                }
-                complete()
-            }
-        }
-    }
-    
-    func refreshBlood() {
-        let date = myLastBlood()?.date
-        let predicate = date == nil ? NSPredicate(value: true) : NSPredicate(format: "date > %@", date! as CVarArg)
-        let query = CKQuery(recordType: "Blood", predicate: predicate)
-
-        cloudDB!.perform(query, inZoneWith: nil) { results, error in
-            guard error == nil else {
-                DispatchQueue.main.async {
-                    print("Cloud Query Error - Refresh: \(error!.localizedDescription)")
-                }
-                return
-            }
-            if results != nil && results!.count > 0 {
-                DispatchQueue.main.async {
-                    for record in results! {
-                        self.addBlood(record)
-                    }
-                    NotificationCenter.default.post(name: refreshNotification, object: nil)
-                }
-            }
-        }
-    }
-    
-    func getBlood(_ record:CKRecord) -> Blood? {
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Blood")
-        fetchRequest.predicate = NSPredicate(format: "recordName == %@", record.recordID.recordName)
-        if let all = try? managedObjectContext.fetch(fetchRequest) as! [Blood], let blood = all.first {
-            return blood
-        } else {
-            return nil
-        }
-    }
-
-    func addBlood(_ record:CKRecord) {
-        if getBlood(record) != nil {
-            return
-        }
-        let blood = NSEntityDescription.insertNewObject(forEntityName: "Blood", into: managedObjectContext) as! Blood
-        blood.recordName = record.recordID.recordName
-        blood.zoneName = record.recordID.zoneID.zoneName
-        blood.ownerName = record.recordID.zoneID.ownerName
-        blood.date = record.value(forKey: "date") as? NSDate
-        blood.value = record.value(forKey: "value") as! Double
-        blood.comments = record.value(forKey: "comments") as? String
-        saveContext()
+    func addBloodAt(_ date:Date, value:Double, comments:String = "") {
+        let blood = NSEntityDescription.insertNewObject(forEntityName: "Blood", into: self.managedObjectContext) as! Blood
+        blood.date = date as NSDate?
+        blood.value = value
+        blood.comments = comments
+        blood.synced = false
+        self.saveContext()
     }
 
     func allBloodForPeriod(_ period:Period) -> [Blood] {
@@ -458,10 +324,21 @@ func dateString(_ date:Date?) -> String {
         }
     }
     
+    func nonSyncedBloods() -> [Blood] {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Blood")
+        fetchRequest.predicate = NSPredicate(format: "synced == %@", NSNumber(booleanLiteral: false))
+        if let all = try? managedObjectContext.fetch(fetchRequest) as! [Blood] {
+            return all
+        } else {
+            return []
+        }
+    }
+    
     // MARK: - Pressure table
     
     func myLastPressure(_ first:Bool = false) -> Pressure? {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pressure")
+        fetchRequest.predicate = NSPredicate(format: "synced == %@", NSNumber(booleanLiteral: true))
         let sortDescriptor = NSSortDescriptor(key: "date", ascending: first)
         fetchRequest.sortDescriptors = [sortDescriptor]
         fetchRequest.fetchLimit = 1
@@ -498,77 +375,22 @@ func dateString(_ date:Date?) -> String {
         }
     }
     
-    func addPressureAt(_ date:Date, high:Int, low:Int, error: @escaping(NSError?) -> ()) {
-        let record = CKRecord(recordType: "Pressure")
-        record.setValue(date, forKey: "date")
-        record.setValue(Double(high), forKey: "highValue")
-        record.setValue(Double(low), forKey: "lowValue")
-        
-        cloudDB!.save(record, completionHandler: { cloudRecord, err in
-            DispatchQueue.main.async {
-                if err != nil {
-                    error(err as NSError?)
-                } else {
-                    let pressure = NSEntityDescription.insertNewObject(forEntityName: "Pressure", into: self.managedObjectContext) as! Pressure
-                    pressure.recordName = cloudRecord!.recordID.recordName
-                    pressure.zoneName = cloudRecord!.recordID.zoneID.zoneName
-                    pressure.ownerName = cloudRecord!.recordID.zoneID.ownerName
-                    pressure.date = date as NSDate?
-                    pressure.highValue = Double(high)
-                    pressure.lowValue = Double(low)
-                    self.saveContext()
-                    error(nil)
-                }
-            }
-        })
-        
+    func addPressureAt(_ date:Date, high:Int, low:Int) {
+        let pressure = NSEntityDescription.insertNewObject(forEntityName: "Pressure", into: self.managedObjectContext) as! Pressure
+        pressure.date = date as NSDate?
+        pressure.highValue = Double(high)
+        pressure.lowValue = Double(low)
+        pressure.synced = false
+        self.saveContext()
     }
     
-    func getPressure(_ record:CKRecord) -> Pressure? {
+    func nonSyncedPressures() -> [Pressure] {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pressure")
-        fetchRequest.predicate = NSPredicate(format: "recordName == %@", record.recordID.recordName)
-        if let all = try? managedObjectContext.fetch(fetchRequest) as! [Pressure], let pressure = all.first {
-            return pressure
+        fetchRequest.predicate = NSPredicate(format: "synced == %@", NSNumber(booleanLiteral: false))
+        if let all = try? managedObjectContext.fetch(fetchRequest) as! [Pressure] {
+            return all
         } else {
-            return nil
-        }
-    }
-    
-    func addPressure(_ record:CKRecord) {
-        if getPressure(record) != nil {
-            return
-        }
-        let pressure = NSEntityDescription.insertNewObject(forEntityName: "Pressure", into: managedObjectContext) as! Pressure
-        pressure.recordName = record.recordID.recordName
-        pressure.zoneName = record.recordID.zoneID.zoneName
-        pressure.ownerName = record.recordID.zoneID.ownerName
-        pressure.date = record.value(forKey: "date") as? NSDate
-        pressure.highValue = record.value(forKey: "highValue") as! Double
-        pressure.lowValue = record.value(forKey: "lowValue") as! Double
-        pressure.comments = record.value(forKey: "comments") as? String
-        saveContext()
-    }
-
-    func refreshPressure() {
-        let date = myLastPressure()?.date
-        let predicate = date == nil ? NSPredicate(value: true) : NSPredicate(format: "date > %@", date! as CVarArg)
-        let query = CKQuery(recordType: "Pressure", predicate: predicate)
-        
-        cloudDB!.perform(query, inZoneWith: nil) { results, error in
-            guard error == nil else {
-                DispatchQueue.main.async {
-                    print("Cloud Query Error - Refresh: \(error!.localizedDescription)")
-                }
-                return
-            }
-            if results != nil && results!.count > 0 {
-                DispatchQueue.main.async {
-                    for record in results! {
-                        self.addPressure(record)
-                    }
-                    NotificationCenter.default.post(name: refreshNotification, object: nil)
-                }
-            }
+            return []
         }
     }
 

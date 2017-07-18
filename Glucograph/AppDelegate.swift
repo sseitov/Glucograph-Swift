@@ -42,20 +42,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             watchSession!.activate()
         }
  */
-        // migration previouse db
-        if MigrationManager.shared().startMigration() {
-            SVProgressHUD.show(withStatus: NSLocalizedString("Migration...", comment: ""))
-            Model.shared.migrateBlood {
-                if Model.shared.bloodCount() > 0 {
-                    MigrationManager.shared().finishMigration()
-                    SVProgressHUD.dismiss()
-                } else {
-                    MigrationManager.shared().migrate({
-                        SVProgressHUD.dismiss()
-                    })
-                }
-            }
-        }
         
         return true
     }
@@ -64,12 +50,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
+        SyncManager.shared.upload()
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+        SyncManager.shared.sync()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

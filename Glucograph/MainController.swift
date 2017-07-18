@@ -27,34 +27,18 @@ class MainController: UIViewController {
         setupType(valueType())
         
         periodControl.selectedSegmentIndex = period().rawValue
-        
-        Model.shared.refreshBlood()
-        Model.shared.refreshPressure()
     }
     
     override func goBack() {
         let alert = Picker.createFor(type: valueType(), acceptHandler: { val1, val2 in
-            SVProgressHUD.show(withStatus: NSLocalizedString("Add...", comment: ""))
             if valueType() == .pressure {
-                Model.shared.addPressureAt(Date(), high: val1, low: val2, error: { err in
-                    SVProgressHUD.dismiss()
-                    if err != nil {
-                        self.showMessage(err!.localizedDescription, messageType: .error)
-                    } else {
-                        self.performSegue(withIdentifier: "notes", sender: nil)
-                    }
-                })
+                Model.shared.addPressureAt(Date(), high: val1, low: val2)
             } else {
                 let value = Double(val1) + Double(val2)/10.0
-                Model.shared.addBloodAt(Date(), value: value, error: { err in
-                    SVProgressHUD.dismiss()
-                    if err != nil {
-                        self.showMessage(err!.localizedDescription, messageType: .error)
-                    } else {
-                        self.performSegue(withIdentifier: "notes", sender: nil)
-                    }
-                })
+                Model.shared.addBloodAt(Date(), value: value)
             }
+            NotificationCenter.default.post(name: refreshNotification, object: nil)
+            SyncManager.shared.upload()
         })
         alert?.show()
     }
