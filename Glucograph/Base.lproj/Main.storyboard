@@ -113,7 +113,7 @@
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Z8u-Gw-U4x" customClass="PeriodControl" customModule="Glucograph" customModuleProvider="target">
                                 <rect key="frame" x="10" y="466" width="300" height="29"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="28" id="Jh4-6c-8if"/>
+                                    <constraint firstAttribute="height" constant="28" id="mtl-gk-PLo"/>
                                 </constraints>
                                 <segments>
                                     <segment title=""/>
@@ -137,17 +137,17 @@
                         </subviews>
                         <color key="backgroundColor" red="0.27450980390000002" green="0.4823529412" blue="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="hF8-hb-Wrh" firstAttribute="leading" secondItem="GhI-4g-xi0" secondAttribute="leading" id="1Ll-qk-NwA"/>
-                            <constraint firstItem="hF8-hb-Wrh" firstAttribute="top" secondItem="gOr-Se-4hD" secondAttribute="bottom" id="3HW-jh-ysl"/>
-                            <constraint firstAttribute="trailing" secondItem="aed-3t-WK9" secondAttribute="trailing" id="3On-ru-Oo3"/>
-                            <constraint firstItem="Z8u-Gw-U4x" firstAttribute="top" secondItem="aed-3t-WK9" secondAttribute="bottom" constant="8" id="A6f-e9-mmN"/>
-                            <constraint firstItem="9lj-SB-ao5" firstAttribute="top" secondItem="Z8u-Gw-U4x" secondAttribute="bottom" constant="10" id="Kl5-u3-nLH"/>
-                            <constraint firstItem="aed-3t-WK9" firstAttribute="leading" secondItem="GhI-4g-xi0" secondAttribute="leading" id="Oeg-5M-jfS"/>
-                            <constraint firstItem="Z8u-Gw-U4x" firstAttribute="top" secondItem="hF8-hb-Wrh" secondAttribute="bottom" constant="8" id="VU7-qi-sYQ"/>
-                            <constraint firstItem="aed-3t-WK9" firstAttribute="top" secondItem="gOr-Se-4hD" secondAttribute="bottom" id="euY-Yj-kfb"/>
-                            <constraint firstAttribute="trailing" secondItem="Z8u-Gw-U4x" secondAttribute="trailing" constant="10" id="lBP-8C-qLL"/>
-                            <constraint firstAttribute="trailing" secondItem="hF8-hb-Wrh" secondAttribute="trailing" id="oK2-KL-164"/>
-                            <constraint firstItem="Z8u-Gw-U4x" firstAttribute="leading" secondItem="GhI-4g-xi0" secondAttribute="leading" constant="10" id="vrJ-9v-Gsy"/>
+                            <constraint firstItem="hF8-hb-Wrh" firstAttribute="leading" secondItem="GhI-4g-xi0" secondAttribute="leading" id="74I-ux-8CD"/>
+                            <constraint firstItem="Z8u-Gw-U4x" firstAttribute="top" secondItem="aed-3t-WK9" secondAttribute="bottom" constant="8" id="BN2-FD-vj2"/>
+                            <constraint firstItem="Z8u-Gw-U4x" firstAttribute="leading" secondItem="GhI-4g-xi0" secondAttribute="leading" constant="10" id="CpQ-z1-K7n"/>
+                            <constraint firstAttribute="trailing" secondItem="hF8-hb-Wrh" secondAttribute="trailing" id="Cv8-Sf-sWk"/>
+                            <constraint firstItem="aed-3t-WK9" firstAttribute="leading" secondItem="GhI-4g-xi0" secondAttribute="leading" id="Gkx-P0-EnU"/>
+                            <constraint firstItem="Z8u-Gw-U4x" firstAttribute="top" secondItem="hF8-hb-Wrh" secondAttribute="bottom" constant="8" id="PIN-az-TR1"/>
+                            <constraint firstAttribute="trailing" secondItem="aed-3t-WK9" secondAttribute="trailing" id="XMn-J9-mgq"/>
+                            <constraint firstAttribute="trailing" secondItem="Z8u-Gw-U4x" secondAttribute="trailing" constant="10" id="daN-Fb-h1O"/>
+                            <constraint firstItem="9lj-SB-ao5" firstAttribute="top" secondItem="Z8u-Gw-U4x" secondAttribute="bottom" constant="10" id="rZb-zw-67f"/>
+                            <constraint firstItem="aed-3t-WK9" firstAttribute="top" secondItem="gOr-Se-4hD" secondAttribute="bottom" id="yDR-qz-vVM"/>
+                            <constraint firstItem="hF8-hb-Wrh" firstAttribute="top" secondItem="gOr-Se-4hD" secondAttribute="bottom" id="zhq-y7-thM"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="hoq-UL-eiz">
@@ -175,6 +175,10 @@
         <scene sceneID="9nT-LM-5eK">
             <objects>
                 <viewController id="XlJ-Fq-nJb" customClass="GlucController" customModule="Glucograph" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="1k5-Be-daF"/>
+                        <viewControllerLayoutGuide type="bottom" id="QAJ-0E-zCv"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Qtf-Na-6Pj">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="458"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -226,6 +230,10 @@
         <scene sceneID="wEE-gW-CNW">
             <objects>
                 <viewController id="b96-0U-CHR" customClass="NotesController" customModule="Glucograph" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="xx2-mf-Brg"/>
+                        <viewControllerLayoutGuide type="bottom" id="Tr9-mv-XAO"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="dcy-1s-vJy">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="458"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
