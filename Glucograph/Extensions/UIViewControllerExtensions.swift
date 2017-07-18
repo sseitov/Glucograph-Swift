@@ -57,23 +57,24 @@ extension UIViewController {
     
     // MARK: - alerts
     
-    func showMessage(_ error:String, messageType:MessageType, messageHandler: (() -> ())? = nil) {
-        var title:String = ""
-        switch messageType {
-        case .success:
-            title = "Success"
-        case .information:
-            title = "Information"
-        default:
-            title = "Error"
-        }
-        let alert = LGAlertView.decoratedAlert(withTitle:title, message: error, cancelButtonTitle: "OK", cancelButtonBlock: { alert in
-            if messageHandler != nil {
-                messageHandler!()
-            }
+    func showMessage(_ message:String, messageType:MessageType, messageHandler: (() -> ())? = nil) {
+        
+        let alert = LGAlertView.decoratedAlert(
+            withTitle: Bundle.main.infoDictionary?["CFBundleName"] as? String,
+            message: message,
+            cancelButtonTitle: "OK",
+            cancelButtonBlock: { alert in
+                if messageHandler != nil {
+                    messageHandler!()
+                }
         })
-        alert!.titleLabel.textColor = messageType == .error ? UIColor.bloodColor() : UIColor.mainColor()
+        if messageType == .error {
+            alert!.titleLabel.textColor = UIColor.errorColor()
+            alert!.okButton.backgroundColor = UIColor.errorColor()
+        } else {
+            alert!.titleLabel.textColor = UIColor.mainColor()
+            alert!.okButton.backgroundColor = UIColor.mainColor()
+        }
         alert?.show()
     }
-
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 import SVProgressHUD
-import WatchConnectivity
+//import WatchConnectivity
 
 func IS_PAD() -> Bool {
     return UIDevice.current.userInterfaceIdiom == .pad
@@ -18,7 +18,7 @@ func IS_PAD() -> Bool {
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var watchSession:WCSession?
+//    var watchSession:WCSession?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
@@ -34,14 +34,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.shared.statusBarStyle = .lightContent
         UIBarButtonItem.appearance().setTitleTextAttributes([NSFontAttributeName : UIFont.condensedFont()], for: .normal)
         SVProgressHUD.setFont(UIFont.condensedFont())
-        
+ /*
         // connect iWatch
         if WCSession.isSupported() {
             watchSession = WCSession.default()
             watchSession!.delegate = self
             watchSession!.activate()
         }
-        
+ */
         // migration previouse db
         if MigrationManager.shared().startMigration() {
             SVProgressHUD.show(withStatus: NSLocalizedString("Migration...", comment: ""))
@@ -78,7 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 // MARK: - WCSession delegate
-
+/*
 extension AppDelegate : WCSessionDelegate {
     
     func sessionDidDeactivate(_ session: WCSession) {
@@ -103,7 +103,7 @@ extension AppDelegate : WCSessionDelegate {
     }
         
     func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
-/*
+
         if let command = message["command"] as? String {
             if command == "status" {
                 replyHandler(self.trackerStatus())
@@ -118,11 +118,11 @@ extension AppDelegate : WCSessionDelegate {
                 replyHandler([:])
             }
         }
- */
+ 
     }
-    
+ 
     func sessionReachabilityDidChange(_ session: WCSession) {
         print("sessionReachabilityDidChange")
     }
 }
-
+*/
