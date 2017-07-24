@@ -119,7 +119,7 @@ class GraphView: UIView {
         let timeScale:CGFloat = (rect.size.width - 20) / CGFloat(timeLength)
         let valueScale:CGFloat = (rect.size.height - 20) / CGFloat(range!.max - range!.min)
         
-        if valueType() == .blood {
+        if glucType() == .blood {
             var blood = objects.last as! Blood
             let graph = UIBezierPath()
             UIColor.bloodColor().setStroke()
@@ -133,6 +133,24 @@ class GraphView: UIView {
                 if (blood.value > 0) {
                     d = CGFloat(Model.shared.objectDate(blood)!.timeIntervalSince1970 - startTime)
                     v = CGFloat(blood.value - range!.min)
+                    graph.addLine(to: CGPoint(x: (origin.x + d*timeScale), y: (origin.y - v*valueScale)))
+                }
+            }
+            graph.stroke()
+        } else if glucType() == .weight {
+            var weight = objects.last as! Weight
+            let graph = UIBezierPath()
+            UIColor.bloodColor().setStroke()
+            graph.lineWidth = IS_PAD() ? 5 : 3
+            var d = CGFloat(Model.shared.objectDate(weight)!.timeIntervalSince1970 - startTime)
+            var v = CGFloat(Double(weight.value) - range!.min)
+            graph.move(to: CGPoint(x: (origin.x + d*timeScale), y: (origin.y - v*valueScale)))
+            
+            for i in (0..<objects.count-1).reversed() {
+                weight = objects[i] as! Weight
+                if (weight.value > 0) {
+                    d = CGFloat(Model.shared.objectDate(weight)!.timeIntervalSince1970 - startTime)
+                    v = CGFloat(Double(weight.value) - range!.min)
                     graph.addLine(to: CGPoint(x: (origin.x + d*timeScale), y: (origin.y - v*valueScale)))
                 }
             }

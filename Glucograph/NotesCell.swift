@@ -21,16 +21,22 @@ class NotesCell: UITableViewCell {
         didSet {
             dateView.text = dayTimeOfDate(Model.shared.objectDate(object) as Date?)?.uppercased()
             commentsView.text = Model.shared.objectComments(object)
-            if valueType() == .blood {
-                let blood = object as! Blood
-                highValue.text = String(format: "%.1f", blood.value)
-                lowValue.text = ""
-                lowWidth.constant = 0
-            } else {
+            switch glucType() {
+            case .pressure:
                 let pressure = object as! Pressure
                 highValue.text = String(format: "%d", Int(pressure.highValue))
                 lowValue.text = String(format: "/ %d", Int(pressure.lowValue))
                 lowWidth.constant = 40
+            case .weight:
+                let weight = object as! Weight
+                highValue.text = String(format: "%d", weight.value)
+                lowValue.text = ""
+                lowWidth.constant = 0
+            default:
+                let blood = object as! Blood
+                highValue.text = String(format: "%.1f", blood.value)
+                lowValue.text = ""
+                lowWidth.constant = 0
             }
         }
     }

@@ -35,6 +35,8 @@ class SyncManager: NSObject {
         }
     }
     
+    // MARK: - Reachability
+   
     private func syncAvailable(_ status:NetworkStatus) -> Bool {
         return status == ReachableViaWiFi
     }
@@ -61,8 +63,14 @@ class SyncManager: NSObject {
                         if pressureError != nil {
                             print("iCloud Refresh Error : \(pressureError!.localizedDescription)")
                         } else {
-                            NotificationCenter.default.post(name: refreshNotification, object: nil)
-                            self.upload()
+                            self.getWeights( { weightError in
+                                if weightError != nil {
+                                    print("iCloud Refresh Error : \(weightError!.localizedDescription)")
+                                } else {
+                                    NotificationCenter.default.post(name: refreshNotification, object: nil)
+                                    self.upload()
+                                }
+                            })
                         }
                     })
                 }
@@ -91,6 +99,18 @@ class SyncManager: NSObject {
                         if record != nil {
                             pressure.recordName = record!.recordID.recordName
                             pressure.synced = true
+                            Model.shared.saveContext()
+                        }
+                    }
+                })
+            }
+            let weights = Model.shared.nonSyncedWeights()
+            for weight in weights {
+                putWeight(weight, result: { record in
+                    DispatchQueue.main.async {
+                        if record != nil {
+                            weight.recordName = record!.recordID.recordName
+                            weight.synced = true
                             Model.shared.saveContext()
                         }
                     }
@@ -135,6 +155,33 @@ class SyncManager: NSObject {
             }
         }
     }
+    
+    private func putBlood(_ blood:Blood, result: @escaping(CKRecord?) -> ()) {
+        if blood.recordName != nil {
+            fetchRecord(blood.recordName!, type: "Blood", record: { record in
+                if record != nil {
+                    record!.setValue(blood.date, forKey: "date")
+                    record!.setValue(blood.value, forKey: "value")
+                    record!.setValue(blood.comments, forKey: "comments")
+                    self.saveRecord(record: record!, result: { cloudRecord in
+                        result(cloudRecord)
+                    })
+                } else {
+                    result(nil)
+                }
+            })
+        } else {
+            let record = CKRecord(recordType: "Blood")
+            record.setValue(blood.date, forKey: "date")
+            record.setValue(blood.value, forKey: "value")
+            record.setValue(blood.comments, forKey: "comments")
+            self.saveRecord(record: record, result: { cloudRecord in
+                result(cloudRecord)
+            })
+        }
+    }
+    
+    // MARK: - Pressure cloud table
 
     private func getPressures(_ result: @escaping(Error?) -> ()) {
         let date = Model.shared.myLastPressure()?.date
@@ -173,31 +220,6 @@ class SyncManager: NSObject {
         }
     }
     
-    private func putBlood(_ blood:Blood, result: @escaping(CKRecord?) -> ()) {
-        if blood.recordName != nil {
-            fetchRecord(blood.recordName!, type: "Blood", record: { record in
-                if record != nil {
-                    record!.setValue(blood.date, forKey: "date")
-                    record!.setValue(blood.value, forKey: "value")
-                    record!.setValue(blood.comments, forKey: "comments")
-                    self.saveRecord(record: record!, result: { cloudRecord in
-                        result(cloudRecord)
-                    })
-                } else {
-                    result(nil)
-                }
-            })
-        } else {
-            let record = CKRecord(recordType: "Blood")
-            record.setValue(blood.date, forKey: "date")
-            record.setValue(blood.value, forKey: "value")
-            record.setValue(blood.comments, forKey: "comments")
-            self.saveRecord(record: record, result: { cloudRecord in
-                result(cloudRecord)
-            })
-        }
-    }
-    
     private func putPressure(_ pressure:Pressure, result: @escaping(CKRecord?) -> ()) {
         if pressure.recordName != nil {
             fetchRecord(pressure.recordName!, type: "Pressure", record: { record in
@@ -225,6 +247,70 @@ class SyncManager: NSObject {
         }
     }
     
+    // MARK: - Weight cloud table
+    
+    private func getWeights(_ result: @escaping(Error?) -> ()) {
+        let date = Model.shared.myLastWeight()?.date
+        let predicate = date == nil ? NSPredicate(value: true) : NSPredicate(format: "date > %@", date! as CVarArg)
+        let query = CKQuery(recordType: "Weight", predicate: predicate)
+        
+        cloudDB!.perform(query, inZoneWith: nil) { results, error in
+            guard error == nil else {
+                DispatchQueue.main.async {
+                    result(error)
+                }
+                return
+            }
+            DispatchQueue.main.async {
+                if results != nil {
+                    for record in results! {
+                        if let date = record.value(forKey: "date") as? NSDate {
+                            var weight = Model.shared.weightForDate(date)
+                            if weight == nil {
+                                weight = NSEntityDescription.insertNewObject(forEntityName: "Weight",
+                                                                            into: Model.shared.managedObjectContext) as? Weight
+                                weight!.date = date
+                            }
+                            weight!.value = Int32(record.value(forKey: "value") as! Int)
+                            weight!.comments = record.value(forKey: "comments") as? String
+                            weight!.recordName = record.recordID.recordName
+                            weight!.synced = true
+                        }
+                    }
+                    Model.shared.saveContext()
+                }
+                result(nil)
+            }
+        }
+    }
+    
+    private func putWeight(_ weight:Weight, result: @escaping(CKRecord?) -> ()) {
+        if weight.recordName != nil {
+            fetchRecord(weight.recordName!, type: "Weight", record: { record in
+                if record != nil {
+                    record!.setValue(weight.date, forKey: "date")
+                    record!.setValue(weight.value, forKey: "value")
+                    record!.setValue(weight.comments, forKey: "comments")
+                    self.saveRecord(record: record!, result: { cloudRecord in
+                        result(cloudRecord)
+                    })
+                } else {
+                    result(nil)
+                }
+            })
+        } else {
+            let record = CKRecord(recordType: "Weight")
+            record.setValue(weight.date, forKey: "date")
+            record.setValue(weight.value, forKey: "value")
+            record.setValue(weight.comments, forKey: "comments")
+            self.saveRecord(record: record, result: { cloudRecord in
+                result(cloudRecord)
+            })
+        }
+    }
+
+    // MARK: - common utility
+
     private func saveRecord(record:CKRecord, result: @escaping(CKRecord?) -> ()) {
         cloudDB!.save(record, completionHandler: { cloudRecord, err in
             DispatchQueue.main.async {

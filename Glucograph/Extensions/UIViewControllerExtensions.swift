@@ -29,7 +29,8 @@ extension UIViewController {
 
     func setupType(_ type:ValueType) {
         let typeControl = UISegmentedControl(items: [NSLocalizedString("Blood", comment: ""),
-                                                       NSLocalizedString("Pressure", comment: "")])
+                                                     NSLocalizedString("Pressure", comment: ""),
+                                                     NSLocalizedString("Weight", comment: "")])
         typeControl.tintColor = UIColor.white
         typeControl.selectedSegmentIndex = type.rawValue
         typeControl.addTarget(self, action: #selector(self.typeControlChange(control:)), for: .valueChanged)
@@ -45,6 +46,8 @@ extension UIViewController {
         switch control.selectedSegmentIndex {
         case 1:
             changeType(.pressure)
+        case 2:
+            changeType(.weight)
         default:
             changeType(.blood)
         }

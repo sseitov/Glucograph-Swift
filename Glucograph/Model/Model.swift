@@ -14,6 +14,7 @@ import CoreData
 enum ValueType:Int {
     case blood = 0
     case pressure = 1
+    case weight = 2
 }
 
 func changeType(_ type:ValueType) {
@@ -21,7 +22,7 @@ func changeType(_ type:ValueType) {
     UserDefaults.standard.synchronize()
 }
 
-func valueType() -> ValueType {
+func glucType() -> ValueType {
     return ValueType(rawValue: UserDefaults.standard.integer(forKey: "ValueType"))!
 }
 
@@ -192,30 +193,41 @@ func dateString(_ date:Date?) -> String {
     // MARK: - Common methods
 
     func objectDate(_ obj:NSManagedObject?) -> NSDate? {
-        if (valueType() == .blood) {
-            return (obj as! Blood).date
-        } else {
+        switch glucType() {
+        case .pressure:
             return (obj as! Pressure).date
+        case .weight:
+            return (obj as! Weight).date
+        default:
+            return (obj as! Blood).date
         }
     }
     
     func objectComments(_ obj:NSManagedObject?) -> String? {
-        if (valueType() == .blood) {
-            return (obj as! Blood).comments
-        } else {
+        switch glucType() {
+        case .pressure:
             return (obj as! Pressure).comments
+        case .weight:
+            return (obj as! Weight).comments
+        default:
+            return (obj as! Blood).comments
         }
     }
    
     func saveComments(_ comments:String, forObject:NSManagedObject?) {
-        if valueType() == .blood {
-            let blood = forObject as! Blood
-            blood.comments = comments
-            blood.synced = false
-        } else {
+        switch glucType() {
+        case .pressure:
             let pressure = forObject as! Pressure
             pressure.comments = comments
             pressure.synced = false
+        case .weight:
+            let weight = forObject as! Weight
+            weight.comments = comments
+            weight.synced = false
+        default:
+            let blood = forObject as! Blood
+            blood.comments = comments
+            blood.synced = false
         }
         saveContext()
     }
@@ -238,27 +250,39 @@ func dateString(_ date:Date?) -> String {
     
     func minMaxRange() -> (min:Double, max:Double)? {
         var values:[Double] = []
-        if valueType() == .blood {
-            let bloods = allBloodForPeriod(period())
-            if bloods.count < 2 {
+        if glucType() == .weight {
+            let weights = allWeightForPeriod(period())
+            if weights.count < 2 {
                 return nil
             }
-            for b in bloods {
-                if b.value > 0 {
-                    values.append(b.value)
+            for w in weights {
+                if w.value > 0 {
+                    values.append(Double(w.value))
                 }
             }
         } else {
-            let pressures = allPressureForPeriod(period())
-            if pressures.count < 2 {
-                return nil
-            }
-            for p in pressures {
-                if p.lowValue > 0 {
-                    values.append(p.lowValue)
+            if glucType() == .blood {
+                let bloods = allBloodForPeriod(period())
+                if bloods.count < 2 {
+                    return nil
                 }
-                if p.highValue > 0 {
-                    values.append(p.highValue)
+                for b in bloods {
+                    if b.value > 0 {
+                        values.append(b.value)
+                    }
+                }
+            } else {
+                let pressures = allPressureForPeriod(period())
+                if pressures.count < 2 {
+                    return nil
+                }
+                for p in pressures {
+                    if p.lowValue > 0 {
+                        values.append(p.lowValue)
+                    }
+                    if p.highValue > 0 {
+                        values.append(p.highValue)
+                    }
                 }
             }
         }
@@ -408,6 +432,85 @@ func dateString(_ date:Date?) -> String {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pressure")
         fetchRequest.predicate = NSPredicate(format: "synced == %@", NSNumber(booleanLiteral: false))
         if let all = try? managedObjectContext.fetch(fetchRequest) as! [Pressure] {
+            return all
+        } else {
+            return []
+        }
+    }
+    
+    // MARK: - Weight table
+    
+    func weightCount() -> Int {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Weight")
+        if let count = try? managedObjectContext.count(for: fetchRequest) {
+            return count
+        } else {
+            return 0
+        }
+    }
+    
+    func myLastWeight(_ first:Bool = false) -> Weight? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Weight")
+        fetchRequest.predicate = NSPredicate(format: "synced == %@", NSNumber(booleanLiteral: true))
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: first)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        fetchRequest.fetchLimit = 1
+        if let all = try? managedObjectContext.fetch(fetchRequest) as! [Weight], let weight = all.first {
+            return weight
+        } else {
+            return nil
+        }
+    }
+    
+    func addWeightAt(_ date:Date, value:Int, comments:String = "") {
+        let weight = NSEntityDescription.insertNewObject(forEntityName: "Weight", into: self.managedObjectContext) as! Weight
+        weight.date = date as NSDate?
+        weight.value = Int32(value)
+        weight.comments = comments
+        weight.synced = false
+        self.saveContext()
+    }
+    
+    func allWeightForPeriod(_ period:Period) -> [Weight] {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Weight")
+        switch period {
+        case .week:
+            fetchRequest.predicate = NSPredicate(format: "date > %@", lastWeek()! as CVarArg)
+        case .monthDate:
+            if let date = UserDefaults.standard.object(forKey: "PeriodDate") as? Date {
+                let pred1 = NSPredicate(format: "date > %@", startOfDay(date)! as CVarArg)
+                let pred2 = NSPredicate(format: "date < %@", endOfMonth(date)! as CVarArg)
+                fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [pred1, pred2])
+            } else {
+                return []
+            }
+        default:
+            break
+        }
+        let sortDescriptor = NSSortDescriptor(key: "date", ascending: false)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        if let all = try? managedObjectContext.fetch(fetchRequest) as! [Weight] {
+            return all
+        } else {
+            return []
+        }
+    }
+    
+    func weightForDate(_ date:NSDate) -> Weight? {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Weight")
+        fetchRequest.predicate = NSPredicate(format: "date == %@", date)
+        if let all = try? managedObjectContext.fetch(fetchRequest) {
+            return all.first as? Weight
+        } else {
+            return nil
+        }
+    }
+    
+    func nonSyncedWeights() -> [Weight] {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Weight")
+        fetchRequest.predicate = NSPredicate(format: "synced == %@", NSNumber(booleanLiteral: false))
+        if let all = try? managedObjectContext.fetch(fetchRequest) as! [Weight] {
             return all
         } else {
             return []

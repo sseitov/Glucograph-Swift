@@ -44,19 +44,25 @@ class Picker: LGAlertView {
         if let pickerAlert = Bundle.main.loadNibNamed("Picker", owner: nil, options: nil)?.first as? Picker {
             pickerAlert.pickerType = type
             pickerAlert.okButton.isHidden = true
-            if type == .blood {
-                pickerAlert.titleLabel.text = NSLocalizedString("Blood sugar level", comment: "")
-            } else {
+            switch type {
+            case .pressure:
                 pickerAlert.titleLabel.text = NSLocalizedString("Pressure", comment: "")
+            case .weight:
+                pickerAlert.titleLabel.text = NSLocalizedString("Weight", comment: "")
+            default:
+                pickerAlert.titleLabel.text = NSLocalizedString("Blood sugar level", comment: "")
             }
             pickerAlert.otherButtonBlock = { alert in
                 pickerAlert.dismiss()
-                if type == .blood {
-                    acceptHandler(33 - pickerAlert.pickerView.selectedRow(inComponent: 0),
-                                  9 - pickerAlert.pickerView.selectedRow(inComponent: 1))
-                } else {
+                switch type {
+                case .pressure:
                     acceptHandler(240 - pickerAlert.pickerView.selectedRow(inComponent: 0),
                                   140 - pickerAlert.pickerView.selectedRow(inComponent: 1))
+                case .weight:
+                    acceptHandler(140 - pickerAlert.pickerView.selectedRow(inComponent: 0), 0)
+                default:
+                    acceptHandler(33 - pickerAlert.pickerView.selectedRow(inComponent: 0),
+                                  9 - pickerAlert.pickerView.selectedRow(inComponent: 1))
                 }
             }
             pickerAlert.pickerView.dataSource = pickerAlert
@@ -70,7 +76,24 @@ class Picker: LGAlertView {
     override func show() {
         super.show()
         if pickerType != nil {
-            if pickerType == .blood {
+            switch pickerType! {
+            case .pressure:
+                let pressure = Model.shared.myLastPressure()
+                if pressure != nil {
+                    pickerView.selectRow(240 - Int(pressure!.highValue), inComponent: 0, animated: false)
+                    pickerView.selectRow(140 - Int(pressure!.lowValue), inComponent: 1, animated: false)
+                } else {
+                    pickerView.selectRow(120, inComponent: 0, animated: false)
+                    pickerView.selectRow(60, inComponent: 1, animated: false)
+                }
+            case .weight:
+                let weight = Model.shared.myLastWeight()
+                if weight != nil {
+                    pickerView.selectRow(140 - Int(weight!.value), inComponent: 0, animated: false)
+                } else {
+                    pickerView.selectRow(70, inComponent: 0, animated: false)
+                }
+            default:
                 let blood = Model.shared.myLastBlood()
                 if blood != nil {
                     let intVal = Int(blood!.value)
@@ -80,15 +103,6 @@ class Picker: LGAlertView {
                 } else {
                     pickerView.selectRow(26, inComponent: 0, animated: false)
                     pickerView.selectRow(7, inComponent: 1, animated: false)
-                }
-            } else {
-                let pressure = Model.shared.myLastPressure()
-                if pressure != nil {
-                    pickerView.selectRow(240 - Int(pressure!.highValue), inComponent: 0, animated: false)
-                    pickerView.selectRow(140 - Int(pressure!.lowValue), inComponent: 1, animated: false)
-                } else {
-                    pickerView.selectRow(120, inComponent: 0, animated: false)
-                    pickerView.selectRow(60, inComponent: 1, animated: false)
                 }
             }
         } else {
@@ -115,7 +129,11 @@ class Picker: LGAlertView {
 extension Picker : UIPickerViewDataSource, UIPickerViewDelegate {
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 2
+        if pickerType == .weight {
+            return 1
+        } else {
+            return 2
+        }
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
@@ -127,7 +145,14 @@ extension Picker : UIPickerViewDataSource, UIPickerViewDelegate {
             }
         } else {
             if pickerType != nil {
-                return pickerType! == .blood ? 32 : 141
+                switch pickerType! {
+                case .pressure:
+                    return 141
+                case .weight:
+                    return 100
+                default:
+                    return 32
+                }
             } else {
                 return 12
             }
@@ -152,7 +177,14 @@ extension Picker : UIPickerViewDataSource, UIPickerViewDelegate {
             if component == 1 {
                 label.text = pickerType! == .blood ? "\(9-row)" :  "\(140 - row)"
             } else {
-                label.text = pickerType! == .blood ? "\(33 - row)." : "\(240 - row)"
+                switch pickerType! {
+                case .pressure:
+                    label.text = "\(240 - row)."
+                case .weight:
+                    label.text = "\(140 - row)"
+                default:
+                    label.text = "\(33 - row)."
+                }
             }
         } else {
             label.font = UIFont.condensedFont(21)

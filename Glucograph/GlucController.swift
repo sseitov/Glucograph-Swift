@@ -18,7 +18,7 @@ class GlucController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupBackButton()
-        setupType(valueType())
+        setupType(glucType())
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.refresh),
                                                name: refreshNotification,
@@ -31,10 +31,13 @@ class GlucController: UIViewController {
     }
     
     func refresh() {
-        if valueType() == .blood {
-            graphView.objects = Model.shared.allBloodForPeriod(period())
-        } else {
+        switch glucType() {
+        case .pressure:
             graphView.objects = Model.shared.allPressureForPeriod(period())
+        case .weight:
+            graphView.objects = Model.shared.allWeightForPeriod(period())
+        default:
+            graphView.objects = Model.shared.allBloodForPeriod(period())
         }
         let range = Model.shared.minMaxRange()
         graphView.range = range

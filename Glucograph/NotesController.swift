@@ -14,6 +14,7 @@ class NotesController: UIViewController, UITableViewDelegate, UITableViewDataSou
     @IBOutlet weak var tableView: UITableView!
     var bloods:[Blood] = []
     var pressures:[Pressure] = []
+    var weights:[Weight] = []
 
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -22,7 +23,7 @@ class NotesController: UIViewController, UITableViewDelegate, UITableViewDataSou
     override func viewDidLoad() {
         super.viewDidLoad()
         setupBackButton()
-        setupType(valueType())
+        setupType(glucType())
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(self.refresh),
                                                name: refreshNotification,
@@ -35,10 +36,13 @@ class NotesController: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
     
     func refresh() {
-        if valueType() == .blood {
-            bloods = Model.shared.allBloodForPeriod(period())
-        } else {
+        switch glucType() {
+        case .pressure:
             pressures = Model.shared.allPressureForPeriod(period())
+        case .weight:
+            weights = Model.shared.allWeightForPeriod(period())
+        default:
+            bloods = Model.shared.allBloodForPeriod(period())
         }
         tableView.reloadData()
     }
@@ -50,7 +54,14 @@ class NotesController: UIViewController, UITableViewDelegate, UITableViewDataSou
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return valueType() == .blood ? bloods.count : pressures.count
+        switch glucType() {
+        case .pressure:
+            return pressures.count
+        case .weight:
+            return weights.count
+        default:
+            return bloods.count
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -63,10 +74,13 @@ class NotesController: UIViewController, UITableViewDelegate, UITableViewDataSou
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         var text:String?
-        if (valueType() == .blood) {
-            text = bloods[indexPath.row].comments
-        } else {
+        switch glucType() {
+        case .pressure:
             text = pressures[indexPath.row].comments
+        case .weight:
+            text = weights[indexPath.row].comments
+        default:
+            text = bloods[indexPath.row].comments
         }
         if (text != nil && !text!.isEmpty) {
             return 80 + text!.heightWithConstrainedWidth(width: tableView.frame.size.width-40, font: UIFont.commentsFont())
@@ -77,10 +91,13 @@ class NotesController: UIViewController, UITableViewDelegate, UITableViewDataSou
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "notes", for: indexPath) as! NotesCell
-        if valueType() == .blood {
-            cell.object = bloods[indexPath.row]
-        } else {
+        switch glucType() {
+        case .pressure:
             cell.object = pressures[indexPath.row]
+        case .weight:
+            cell.object = weights[indexPath.row]
+        default:
+            cell.object = bloods[indexPath.row]
         }
         return cell
     }

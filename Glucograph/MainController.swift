@@ -24,16 +24,19 @@ class MainController: UIViewController {
         tableView.alpha = 0
         
         setupBackButton()
-        setupType(valueType())
+        setupType(glucType())
         
         periodControl.selectedSegmentIndex = period().rawValue
     }
     
     override func goBack() {
-        let alert = Picker.createFor(type: valueType(), acceptHandler: { val1, val2 in
-            if valueType() == .pressure {
+        let alert = Picker.createFor(type: glucType(), acceptHandler: { val1, val2 in
+            switch glucType() {
+            case .pressure:
                 Model.shared.addPressureAt(Date(), high: val1, low: val2)
-            } else {
+            case .weight:
+                Model.shared.addWeightAt(Date(), value: val1)
+            default:
                 let value = Double(val1) + Double(val2)/10.0
                 Model.shared.addBloodAt(Date(), value: value)
             }

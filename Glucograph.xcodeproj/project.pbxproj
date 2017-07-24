@@ -36,6 +36,8 @@
 		2C7481C61E74683A001744F9 /* PeriodControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7481C51E74683A001744F9 /* PeriodControl.swift */; };
 		2C7E6EF11F1DDD30002CB4A1 /* SyncManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C7E6EF01F1DDD30002CB4A1 /* SyncManager.swift */; };
 		2C7E6EF51F1DE0ED002CB4A1 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C7E6EF41F1DE0ED002CB4A1 /* Reachability.m */; };
+		2C88CF9A1F267DB000FD2503 /* Weight+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C88CF981F267DB000FD2503 /* Weight+CoreDataClass.swift */; };
+		2C88CF9B1F267DB000FD2503 /* Weight+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C88CF991F267DB000FD2503 /* Weight+CoreDataProperties.swift */; };
 		2CA335591E747CD9005955D4 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA335581E747CD9005955D4 /* GraphView.swift */; };
 		2CA3355B1E747D7B005955D4 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA3355A1E747D7B005955D4 /* UIViewExtensions.swift */; };
 		2CA3355D1E749A47005955D4 /* xAxizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA3355C1E749A47005955D4 /* xAxizView.swift */; };
@@ -88,6 +90,9 @@
 		2C7E6EF01F1DDD30002CB4A1 /* SyncManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SyncManager.swift; sourceTree = "<group>"; };
 		2C7E6EF31F1DE0ED002CB4A1 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		2C7E6EF41F1DE0ED002CB4A1 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		2C88CF971F267CD300FD2503 /* LocalCache 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LocalCache 3.xcdatamodel"; sourceTree = "<group>"; };
+		2C88CF981F267DB000FD2503 /* Weight+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Weight+CoreDataClass.swift"; path = "Model/Weight+CoreDataClass.swift"; sourceTree = "<group>"; };
+		2C88CF991F267DB000FD2503 /* Weight+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Weight+CoreDataProperties.swift"; path = "Model/Weight+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		2CA335581E747CD9005955D4 /* GraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GraphView.swift; path = CustomViews/GraphView.swift; sourceTree = "<group>"; };
 		2CA3355A1E747D7B005955D4 /* UIViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIViewExtensions.swift; path = Extensions/UIViewExtensions.swift; sourceTree = "<group>"; };
 		2CA3355C1E749A47005955D4 /* xAxizView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = xAxizView.swift; path = CustomViews/xAxizView.swift; sourceTree = "<group>"; };
@@ -214,6 +219,8 @@
 			isa = PBXGroup;
 			children = (
 				2C0817061E72FEED008794CF /* LocalCache.xcdatamodeld */,
+				2C88CF981F267DB000FD2503 /* Weight+CoreDataClass.swift */,
+				2C88CF991F267DB000FD2503 /* Weight+CoreDataProperties.swift */,
 				2C35CE6B1E73E1A300CE956B /* Blood+CoreDataClass.swift */,
 				2C35CE6C1E73E1A300CE956B /* Blood+CoreDataProperties.swift */,
 				2C35CE6D1E73E1A300CE956B /* Pressure+CoreDataClass.swift */,
@@ -411,6 +418,7 @@
 				2C0816AD1E728D86008794CF /* UIColorExtensions.swift in Sources */,
 				2CFF85BF1E73126A00C3EB41 /* Model.swift in Sources */,
 				2C0816B71E72AACF008794CF /* NotesController.swift in Sources */,
+				2C88CF9B1F267DB000FD2503 /* Weight+CoreDataProperties.swift in Sources */,
 				2C7E6EF11F1DDD30002CB4A1 /* SyncManager.swift in Sources */,
 				2C0817081E72FEED008794CF /* LocalCache.xcdatamodeld in Sources */,
 				2C35CE6F1E73E1A300CE956B /* Blood+CoreDataClass.swift in Sources */,
@@ -418,6 +426,7 @@
 				2CA3355D1E749A47005955D4 /* xAxizView.swift in Sources */,
 				2C7481C61E74683A001744F9 /* PeriodControl.swift in Sources */,
 				2C35CE701E73E1A300CE956B /* Blood+CoreDataProperties.swift in Sources */,
+				2C88CF9A1F267DB000FD2503 /* Weight+CoreDataClass.swift in Sources */,
 				2C0816A91E728D5B008794CF /* NSPointerArray+AbstractionHelpers.m in Sources */,
 				2C7481C41E74404A001744F9 /* CommentsController.swift in Sources */,
 				2C35CE6A1E73D71B00CE956B /* NotesCell.swift in Sources */,
@@ -629,10 +638,11 @@
 		2C0817061E72FEED008794CF /* LocalCache.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				2C88CF971F267CD300FD2503 /* LocalCache 3.xcdatamodel */,
 				2C7E6EEF1F1DD76C002CB4A1 /* LocalCache 2.xcdatamodel */,
 				2C0817071E72FEED008794CF /* LocalCache.xcdatamodel */,
 			);
-			currentVersion = 2C7E6EEF1F1DD76C002CB4A1 /* LocalCache 2.xcdatamodel */;
+			currentVersion = 2C88CF971F267CD300FD2503 /* LocalCache 3.xcdatamodel */;
 			name = LocalCache.xcdatamodeld;
 			path = Model/LocalCache.xcdatamodeld;
 			sourceTree = "<group>";

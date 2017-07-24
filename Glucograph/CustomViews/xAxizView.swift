@@ -53,13 +53,24 @@ class xAxizView: UIView {
     }
     
     func drawStartEnd(_ rect: CGRect) {
-        if valueType() == .blood {
+        if glucType() == .blood {
             if let first = Model.shared.myLastBlood(true) {
                 let textRect = CGRect(x: 30, y: 0, width: 100, height: 20)
                 let text = dateString(first.date as Date?) as NSString
                 text.draw(UIFont.condensedFont(15), color: UIColor.white, rect: textRect, alignment:.left)
             }
             if let last = Model.shared.myLastBlood() {
+                let textRect = CGRect(x: bounds.size.width - 110, y: 0, width: 100, height: 20)
+                let text = dateString(last.date as Date?) as NSString
+                text.draw(UIFont.condensedFont(15), color: UIColor.white, rect: textRect, alignment:.right)
+            }
+        } else  if glucType() == .weight {
+            if let first = Model.shared.myLastWeight(true) {
+                let textRect = CGRect(x: 30, y: 0, width: 100, height: 20)
+                let text = dateString(first.date as Date?) as NSString
+                text.draw(UIFont.condensedFont(15), color: UIColor.white, rect: textRect, alignment:.left)
+            }
+            if let last = Model.shared.myLastWeight() {
                 let textRect = CGRect(x: bounds.size.width - 110, y: 0, width: 100, height: 20)
                 let text = dateString(last.date as Date?) as NSString
                 text.draw(UIFont.condensedFont(15), color: UIColor.white, rect: textRect, alignment:.right)
