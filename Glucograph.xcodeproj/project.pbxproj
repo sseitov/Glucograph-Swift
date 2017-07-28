@@ -77,6 +77,7 @@
 		2C0816FB1E72E223008794CF /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2C0817001E72EC0A008794CF /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		2C0817071E72FEED008794CF /* LocalCache.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LocalCache.xcdatamodel; sourceTree = "<group>"; };
+		2C20D1EC1F2B1CE30096A647 /* LocalCache 4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LocalCache 4.xcdatamodel"; sourceTree = "<group>"; };
 		2C35CE691E73D71B00CE956B /* NotesCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesCell.swift; sourceTree = "<group>"; };
 		2C35CE6B1E73E1A300CE956B /* Blood+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Blood+CoreDataClass.swift"; path = "Model/Blood+CoreDataClass.swift"; sourceTree = "<group>"; };
 		2C35CE6C1E73E1A300CE956B /* Blood+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Blood+CoreDataProperties.swift"; path = "Model/Blood+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -638,11 +639,12 @@
 		2C0817061E72FEED008794CF /* LocalCache.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				2C20D1EC1F2B1CE30096A647 /* LocalCache 4.xcdatamodel */,
 				2C88CF971F267CD300FD2503 /* LocalCache 3.xcdatamodel */,
 				2C7E6EEF1F1DD76C002CB4A1 /* LocalCache 2.xcdatamodel */,
 				2C0817071E72FEED008794CF /* LocalCache.xcdatamodel */,
 			);
-			currentVersion = 2C88CF971F267CD300FD2503 /* LocalCache 3.xcdatamodel */;
+			currentVersion = 2C20D1EC1F2B1CE30096A647 /* LocalCache 4.xcdatamodel */;
 			name = LocalCache.xcdatamodeld;
 			path = Model/LocalCache.xcdatamodeld;
 			sourceTree = "<group>";

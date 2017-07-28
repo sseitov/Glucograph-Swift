@@ -462,10 +462,10 @@ func dateString(_ date:Date?) -> String {
         }
     }
     
-    func addWeightAt(_ date:Date, value:Int, comments:String = "") {
+    func addWeightAt(_ date:Date, value:Double, comments:String = "") {
         let weight = NSEntityDescription.insertNewObject(forEntityName: "Weight", into: self.managedObjectContext) as! Weight
         weight.date = date as NSDate?
-        weight.value = Int32(value)
+        weight.value = value
         weight.comments = comments
         weight.synced = false
         self.saveContext()

@@ -35,7 +35,8 @@ class MainController: UIViewController {
             case .pressure:
                 Model.shared.addPressureAt(Date(), high: val1, low: val2)
             case .weight:
-                Model.shared.addWeightAt(Date(), value: val1)
+                let value = Double(val1) + Double(val2)/10.0
+                Model.shared.addWeightAt(Date(), value: value)
             default:
                 let value = Double(val1) + Double(val2)/10.0
                 Model.shared.addBloodAt(Date(), value: value)

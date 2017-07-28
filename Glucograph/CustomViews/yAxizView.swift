@@ -21,7 +21,7 @@ class yAxizView: UIView {
         let stepVal = (range!.max - range!.min)/10
         var val = range!.min
         for _ in 0...10 {
-            let text = glucType() == .blood ? NSString(format: "%.1f", val) : NSString(format: "%d", Int(val))
+            let text = glucType() == .pressure ? NSString(format: "%d", Int(val)) : NSString(format: "%.1f", val)
             text.draw(UIFont.condensedFont(12), color: UIColor.white, rect: textRect)
             val += stepVal
             textRect.origin.y -= stepY

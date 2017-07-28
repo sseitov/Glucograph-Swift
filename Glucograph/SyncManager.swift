@@ -252,7 +252,7 @@ class SyncManager: NSObject {
     private func getWeights(_ result: @escaping(Error?) -> ()) {
         let date = Model.shared.myLastWeight()?.date
         let predicate = date == nil ? NSPredicate(value: true) : NSPredicate(format: "date > %@", date! as CVarArg)
-        let query = CKQuery(recordType: "Weight", predicate: predicate)
+        let query = CKQuery(recordType: "WeightD", predicate: predicate)
         
         cloudDB!.perform(query, inZoneWith: nil) { results, error in
             guard error == nil else {
@@ -271,7 +271,7 @@ class SyncManager: NSObject {
                                                                             into: Model.shared.managedObjectContext) as? Weight
                                 weight!.date = date
                             }
-                            weight!.value = Int32(record.value(forKey: "value") as! Int)
+                            weight!.value = record.value(forKey: "value") as! Double
                             weight!.comments = record.value(forKey: "comments") as? String
                             weight!.recordName = record.recordID.recordName
                             weight!.synced = true
@@ -286,7 +286,7 @@ class SyncManager: NSObject {
     
     private func putWeight(_ weight:Weight, result: @escaping(CKRecord?) -> ()) {
         if weight.recordName != nil {
-            fetchRecord(weight.recordName!, type: "Weight", record: { record in
+            fetchRecord(weight.recordName!, type: "WeightD", record: { record in
                 if record != nil {
                     record!.setValue(weight.date, forKey: "date")
                     record!.setValue(weight.value, forKey: "value")
@@ -299,7 +299,7 @@ class SyncManager: NSObject {
                 }
             })
         } else {
-            let record = CKRecord(recordType: "Weight")
+            let record = CKRecord(recordType: "WeightD")
             record.setValue(weight.date, forKey: "date")
             record.setValue(weight.value, forKey: "value")
             record.setValue(weight.comments, forKey: "comments")

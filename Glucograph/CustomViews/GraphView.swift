@@ -140,17 +140,17 @@ class GraphView: UIView {
         } else if glucType() == .weight {
             var weight = objects.last as! Weight
             let graph = UIBezierPath()
-            UIColor.bloodColor().setStroke()
+            UIColor.mainColor().setStroke()
             graph.lineWidth = IS_PAD() ? 5 : 3
             var d = CGFloat(Model.shared.objectDate(weight)!.timeIntervalSince1970 - startTime)
-            var v = CGFloat(Double(weight.value) - range!.min)
+            var v = CGFloat(weight.value - range!.min)
             graph.move(to: CGPoint(x: (origin.x + d*timeScale), y: (origin.y - v*valueScale)))
             
             for i in (0..<objects.count-1).reversed() {
                 weight = objects[i] as! Weight
                 if (weight.value > 0) {
                     d = CGFloat(Model.shared.objectDate(weight)!.timeIntervalSince1970 - startTime)
-                    v = CGFloat(Double(weight.value) - range!.min)
+                    v = CGFloat(weight.value - range!.min)
                     graph.addLine(to: CGPoint(x: (origin.x + d*timeScale), y: (origin.y - v*valueScale)))
                 }
             }

@@ -29,7 +29,7 @@ class NotesCell: UITableViewCell {
                 lowWidth.constant = 40
             case .weight:
                 let weight = object as! Weight
-                highValue.text = String(format: "%d", weight.value)
+                highValue.text = String(format: "%.1f", weight.value)
                 lowValue.text = ""
                 lowWidth.constant = 0
             default:

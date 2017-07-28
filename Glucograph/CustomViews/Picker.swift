@@ -59,7 +59,8 @@ class Picker: LGAlertView {
                     acceptHandler(240 - pickerAlert.pickerView.selectedRow(inComponent: 0),
                                   140 - pickerAlert.pickerView.selectedRow(inComponent: 1))
                 case .weight:
-                    acceptHandler(140 - pickerAlert.pickerView.selectedRow(inComponent: 0), 0)
+                    acceptHandler(140 - pickerAlert.pickerView.selectedRow(inComponent: 0),
+                                  9 - pickerAlert.pickerView.selectedRow(inComponent: 1))
                 default:
                     acceptHandler(33 - pickerAlert.pickerView.selectedRow(inComponent: 0),
                                   9 - pickerAlert.pickerView.selectedRow(inComponent: 1))
@@ -89,9 +90,13 @@ class Picker: LGAlertView {
             case .weight:
                 let weight = Model.shared.myLastWeight()
                 if weight != nil {
+                    let intVal = Int(weight!.value)
+                    let decVal = Int((weight!.value - Double(intVal))*10)
                     pickerView.selectRow(140 - Int(weight!.value), inComponent: 0, animated: false)
+                    pickerView.selectRow(9 - decVal , inComponent: 1, animated: false)
                 } else {
                     pickerView.selectRow(70, inComponent: 0, animated: false)
+                    pickerView.selectRow(9, inComponent: 1, animated: false)
                 }
             default:
                 let blood = Model.shared.myLastBlood()
@@ -129,17 +134,18 @@ class Picker: LGAlertView {
 extension Picker : UIPickerViewDataSource, UIPickerViewDelegate {
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        if pickerType == .weight {
-            return 1
-        } else {
-            return 2
-        }
+        return 2
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if component == 1 {
             if pickerType != nil {
-                return pickerType! == .blood ? 10 : 121
+                switch pickerType! {
+                case .pressure:
+                    return 121
+                default:
+                    return 10
+                }
             } else {
                 return 100
             }
@@ -169,19 +175,26 @@ extension Picker : UIPickerViewDataSource, UIPickerViewDelegate {
         label.textAlignment = .center
         if pickerType != nil {
             label.font = UIFont.condensedFont(27)
-            if pickerType! == .blood {
+            if pickerType! == .weight {
+                label.textColor = UIColor.mainColor()
+            } else if pickerType! == .blood {
                 label.textColor = UIColor.bloodColor()
             } else {
                 label.textColor = component == 1 ? UIColor.mainColor() : UIColor.bloodColor()
             }
             if component == 1 {
-                label.text = pickerType! == .blood ? "\(9-row)" :  "\(140 - row)"
+                switch pickerType! {
+                case .pressure:
+                    label.text = "\(140 - row)"
+                default:
+                    label.text = "\(9-row)"
+                }
             } else {
                 switch pickerType! {
                 case .pressure:
                     label.text = "\(240 - row)."
                 case .weight:
-                    label.text = "\(140 - row)"
+                    label.text = "\(140 - row)."
                 default:
                     label.text = "\(33 - row)."
                 }
